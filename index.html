@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Л4–5. Списки, кортежи и словари</title>
+<script>
+(function(){var c='system';try{c=localStorage.getItem('py-course-theme')||'system'}catch(e){}
+var d=c==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches):c==='dark';
+document.documentElement.setAttribute('data-theme',d?'dark':'light')})();
+</script>
+<style>
+/* ===== Дизайн-система курса: «тетрадь инженера» ===== */
+:root{
+  --paper:#F4EFE4; --paper-2:#EAE3D2; --card:#FFFCF5; --ink:#1D1B2E; --ink-2:#48455C; --ink-3:#625E74;
+  --line:#D6CDB8; --accent:#A83210; --accent-bg:#D9552B; --accent-soft:#F7DCCF; --on-accent:#FFFFFF;
+  --sea:#0A6968; --sea-soft:#CDE6E1; --sun:#E9B33C; --sun-soft:#F8E7B4; --plum:#73388A; --plum-soft:#EBDAF0;
+  --ok:#256B31; --ok-soft:#D5ECD6; --err:#A8221B; --err-soft:#FADFDB;
+  --shade:#1D1B2E; --marker:#F5D36B;
+  --code-bg:#FFFFFF; --code-line:#E2DAC8; --code-num:#77705D; --code-head:#EFE8D9;
+  --out-bg:#211F36; --out-ink:#EFEADF; --out-dim:#B4AFC6; --out-typed:#FFC95C; --out-err:#FFA79E;
+  --sb:rgba(29,27,46,.22); --sb-hover:rgba(29,27,46,.45);
+  --t-k:#0000FF; --t-c:#AF00DB; --t-s:#A31515; --t-m:#008000; --t-n:#098658; --t-f:#795E26; --t-t:#267F99; --t-v:#001080; --t-o:#000000;
+  --f-display:"Sitka Display","Sitka Heading","Constantia","Iowan Old Style","Palatino Linotype","Noto Serif",Georgia,serif;
+  --f-body:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Roboto","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"Cascadia Code","Cascadia Mono",Consolas,"SF Mono",Menlo,"DejaVu Sans Mono","Courier New",monospace;
+  --top:56px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --paper:#13141F; --paper-2:#1B1D2B; --card:#1E2030; --ink:#EEE9DD; --ink-2:#C4C0D0; --ink-3:#A29EB3;
+  --line:#353850; --accent:#FF9166; --accent-bg:#E0633A; --accent-soft:#4A2A20; --on-accent:#14110F;
+  --sea:#5FD3C6; --sea-soft:#183B3A; --sun:#F2C55C; --sun-soft:#4A3D17; --plum:#D7A6EA; --plum-soft:#3A2646;
+  --ok:#7FD48A; --ok-soft:#1D3A24; --err:#FF9A90; --err-soft:#4A211E;
+  --shade:#07070C; --marker:#6B5516;
+  --code-bg:#1E1E1E; --code-line:#33364A; --code-num:#8E8E99; --code-head:#262838;
+  --out-bg:#0C0D15; --out-ink:#E9E4D8; --out-dim:#A09CB2; --out-typed:#FFC95C; --out-err:#FFA79E;
+  --sb:rgba(238,233,221,.2); --sb-hover:rgba(238,233,221,.42);
+  --t-k:#569CD6; --t-c:#C586C0; --t-s:#CE9178; --t-m:#6A9955; --t-n:#B5CEA8; --t-f:#DCDCAA; --t-t:#4EC9B0; --t-v:#9CDCFE; --t-o:#D4D4D4;
+  color-scheme:dark;
+}
+
+/* ===== Основа ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--top) + 18px)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.68 var(--f-body);overflow-wrap:break-word}
+h1,h2,h3{font-family:var(--f-display);line-height:1.12;margin:0;font-weight:700;letter-spacing:-.01em}
+p{margin:0 0 1.05em}
+a{color:var(--accent);text-underline-offset:.18em}
+strong{font-weight:650}
+ul,ol{margin:0 0 1.1em;padding-left:1.35em}
+li{margin:.3em 0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--sea);outline-offset:3px;border-radius:4px}
+kbd{font:600 .82em/1 var(--f-mono);padding:.22em .5em;border:1.5px solid var(--ink);border-bottom-width:3px;border-radius:6px;background:var(--card);white-space:nowrap}
+code{font-family:var(--f-mono);font-size:.9em}
+code,pre,kbd,.mono,.steplist,.steplist *,.expr,.expr *,.screen,.screen *,.bug-line,.bug-msg,.out,.out *,.lg-steps,.lg-steps *,.sl-expr,.sl-expr *,input[type="text"],.lp-cond,.lp-var b,.chipset button{font-variant-ligatures:none!important;font-feature-settings:"liga" 0,"calt" 0!important}
+p code,li code,td code,summary code,.note code{background:var(--code-bg);border:1px solid var(--code-line);border-radius:5px;padding:.08em .34em;white-space:nowrap;color:var(--t-o)}
+.term{font-weight:650;background:linear-gradient(transparent 58%,var(--marker) 58%);padding:0 .08em}
+
+/* свои полосы прокрутки: тонкие, полупрозрачные */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--sb);border-radius:99px;border:3.5px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:var(--sb-hover);border:3px solid transparent;background-clip:content-box}
+@supports not selector(::-webkit-scrollbar){*{scrollbar-width:thin;scrollbar-color:var(--sb) transparent}}
+
+/* ===== Шапка и прогресс ===== */
+.progress{position:fixed;inset:0 0 auto 0;height:4px;z-index:60;background:transparent;pointer-events:none}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--accent-bg));border-radius:0 4px 4px 0}
+.topbar{position:sticky;top:0;z-index:50;height:var(--top);display:flex;align-items:center;gap:.75rem;padding:0 clamp(.75rem,3vw,1.75rem);
+  background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.brand{display:flex;align-items:center;gap:.6rem;min-width:0;margin-right:auto;font-weight:650;font-size:.92rem;text-decoration:none;color:var(--ink)}
+.brand b{flex:none;display:grid;place-items:center;width:34px;height:34px;border:1.5px solid var(--ink);border-radius:9px 9px 9px 2px;background:var(--sun);color:#1D1B2E;font:700 .95rem/1 var(--f-mono);box-shadow:2.5px 2.5px 0 var(--shade)}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{color:var(--ink-3);font-weight:500;font-size:.86em}
+.toc-btn{display:none;align-items:center;gap:.4rem;height:36px;padding:0 .7rem;border:1.5px solid var(--ink);border-radius:9px;background:var(--card);cursor:pointer;font-weight:600;font-size:.85rem}
+.toc-btn svg{width:16px;height:16px}
+.themes{display:flex;flex:none;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;background:var(--card)}
+.themes button{display:flex;align-items:center;gap:.35rem;height:34px;padding:0 .6rem;border:0;background:transparent;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--ink-2)}
+.themes button+button{border-left:1.5px solid var(--ink)}
+.themes button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.themes svg{width:16px;height:16px;flex:none}
+
+/* ===== Каркас ===== */
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr);gap:clamp(1.5rem,4vw,3.5rem);max-width:1220px;margin:0 auto;padding:0 clamp(1rem,3vw,1.75rem)}
+main{min-width:0;max-width:800px;padding-bottom:4rem}
+.toc{position:sticky;top:calc(var(--top) + 1.25rem);align-self:start;max-height:calc(100vh - var(--top) - 2.5rem);overflow:auto;padding:1.1rem .4rem 1rem 0;margin-top:1.5rem}
+.toc h2{font:700 .72rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .8rem .2rem}
+.toc ol{list-style:none;margin:0;padding:0;border-left:1.5px solid var(--line)}
+.toc li{margin:0}
+.toc a{display:flex;gap:.6rem;align-items:baseline;padding:.42rem .5rem .42rem .8rem;margin-left:-1.5px;border-left:3px solid transparent;color:var(--ink-2);text-decoration:none;font-size:.9rem;line-height:1.3;border-radius:0 8px 8px 0}
+.toc a:hover{color:var(--ink);background:var(--paper-2)}
+.toc-n{font:600 .74rem/1 var(--f-mono);color:var(--ink-3);flex:none}
+.toc a.done .toc-n{color:var(--ok)}
+.toc a.active{color:var(--ink);font-weight:650;border-left-color:var(--accent-bg);background:var(--paper-2)}
+.toc a.active .toc-n{color:var(--accent)}
+
+/* ===== Титульный блок ===== */
+.hero{position:relative;padding:clamp(2.2rem,7vw,4.5rem) 0 clamp(1.6rem,4vw,2.6rem);margin-bottom:1rem;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background-image:radial-gradient(var(--line) 1.3px,transparent 1.5px);background-size:22px 22px;
+  -webkit-mask-image:linear-gradient(115deg,transparent 30%,#000 100%);mask-image:linear-gradient(115deg,transparent 30%,#000 100%)}
+.hero-num{position:absolute;z-index:-1;right:-.03em;top:-.02em;font:italic 700 clamp(10.5rem,36vw,23rem)/.8 var(--f-display);letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px var(--accent-bg);user-select:none}
+.hero-num::after{content:attr(data-n);position:absolute;left:.035em;top:.035em;z-index:-1;color:var(--sun-soft);-webkit-text-stroke:0}
+.kicker{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:0 0 1.1rem;font:700 .74rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.kicker span{padding:.42rem .65rem;border:1.5px solid var(--ink);border-radius:99px;background:var(--card);color:var(--ink)}
+.kicker span:first-child{background:var(--ink);color:var(--paper)}
+.hero h1{font-size:clamp(2.5rem,8.4vw,5rem);max-width:11ch;text-wrap:balance}
+.hero h1 em{display:block;margin-top:.6rem;font:italic 400 clamp(1.15rem,3.2vw,1.7rem)/1.25 var(--f-display);letter-spacing:0;color:var(--ink-2);max-width:22ch}
+.lead{max-width:36rem;margin:1.6rem 0 0;font-size:1.12rem;line-height:1.6;padding:1rem 1.15rem;background:var(--card);border:1.5px solid var(--ink);border-radius:4px 18px 18px 18px;box-shadow:5px 5px 0 var(--accent-bg)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0;margin:1.5rem 0 0}
+.chips li{margin:0;padding:.3rem .7rem;border:1.5px dashed var(--ink-3);border-radius:99px;font-size:.84rem;font-weight:600;background:var(--paper)}
+
+/* ===== Разделы ===== */
+.sec{padding-top:clamp(2.2rem,5vw,3.4rem)}
+.sec-head{display:flex;align-items:flex-end;gap:.9rem;margin-bottom:1.3rem;padding-bottom:.8rem;border-bottom:1.5px solid var(--ink)}
+.sec-num{flex:none;font:italic 700 clamp(3.4rem,9vw,5.2rem)/.74 var(--f-display);color:var(--accent);letter-spacing:-.04em}
+.sec-head h2{font-size:clamp(1.55rem,4.2vw,2.3rem);text-wrap:balance}
+.sec-head p{margin:.3rem 0 0;font:600 .74rem/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+h3{font-size:clamp(1.18rem,2.8vw,1.42rem);margin:2rem 0 .7rem}
+h3::before{content:"";display:inline-block;width:.7em;height:.7em;margin-right:.5em;background:var(--sun);border:1.5px solid var(--ink);border-radius:3px 50% 50% 50%;transform:translateY(.03em)}
+
+/* карточки «было — стало» и план */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:1rem;margin:1.2rem 0}
+.tile{padding:1rem 1.1rem;background:var(--card);border:1.5px solid var(--ink);border-radius:16px 16px 16px 3px}
+.tile h3{margin:0 0 .5rem;font-size:1.08rem}
+.tile h3::before{display:none}
+.tile ul{margin:0;padding-left:1.1em;font-size:.95rem}
+.tile.b{background:var(--sea-soft)} .tile.c{background:var(--sun-soft)}
+.plan{list-style:none;padding:0;margin:1.2rem 0;display:grid;gap:.55rem;counter-reset:pl}
+.plan li{counter-increment:pl;display:grid;grid-template-columns:2.6rem 1fr;align-items:baseline;gap:.2rem;margin:0;padding:.6rem .9rem .6rem .4rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px}
+.plan li::before{content:counter(pl);font:italic 700 1.5rem/1 var(--f-display);color:var(--accent);text-align:center}
+.plan b{font-weight:650}
+.plan span{color:var(--ink-2);font-size:.93rem}
+
+/* ===== Выноски ===== */
+.note{--c:var(--sun);--cs:var(--sun-soft);position:relative;margin:2rem 0 1.6rem;padding:1.25rem 1.15rem .95rem;background:var(--card);border:1.5px solid var(--ink);border-radius:4px 18px 18px 18px;box-shadow:5px 5px 0 var(--c)}
+.note>:last-child{margin-bottom:0}
+.note .tag{position:absolute;top:-.82rem;left:.9rem;padding:.36rem .7rem;background:var(--cs);border:1.5px solid var(--ink);border-radius:99px;font:700 .7rem/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.note.warn{--c:var(--accent-bg);--cs:var(--accent-soft)}
+.note.term-box{--c:var(--sea);--cs:var(--sea-soft)}
+.note.kr{--c:var(--plum);--cs:var(--plum-soft)}
+.recap{margin:1.8rem 0 0;padding:1rem 1.1rem;border:1.5px dashed var(--ink-3);border-radius:14px;background:var(--paper-2)}
+.recap h3{margin:0 0 .5rem;font:700 .74rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.recap h3::before{display:none}
+.recap ul{list-style:none;margin:0;padding:0}
+.recap li{position:relative;padding-left:1.6rem;margin:.38rem 0}
+.recap li::before{content:"";position:absolute;left:.15rem;top:.48em;width:.8rem;height:.42rem;border-left:2.5px solid var(--ok);border-bottom:2.5px solid var(--ok);transform:rotate(-45deg)}
+
+/* ===== Код ===== */
+.code{margin:1.4rem 0;border:1.5px solid var(--ink);border-radius:14px 14px 14px 3px;overflow:hidden;background:var(--code-bg);box-shadow:5px 5px 0 var(--shade)}
+.code figcaption{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.38rem .5rem .38rem .9rem;background:var(--code-head);border-bottom:1.5px solid var(--ink)}
+.code-name{font:600 .78rem/1.2 var(--f-mono);color:var(--ink-2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{flex:none;height:28px;padding:0 .65rem;border:1.5px solid var(--ink);border-radius:8px;background:var(--card);cursor:pointer;font:600 .76rem/1 var(--f-body)}
+.copy:hover{background:var(--sun-soft)}
+.copy.ok{background:var(--ok-soft);border-color:var(--ok)}
+.code pre{margin:0;padding:.85rem 1rem .85rem 0;overflow-x:auto;font:400 .875rem/1.62 var(--f-mono);tab-size:4;color:var(--t-o);counter-reset:ln}
+.code pre code{font-size:inherit;display:block;width:max-content;min-width:100%}
+.code .l{display:inline-block;min-width:100%;min-height:1.62em;vertical-align:top;padding-left:3.5rem;position:relative;counter-increment:ln}
+.code .l::before{content:counter(ln);position:absolute;left:0;width:2.6rem;text-align:right;color:var(--code-num);user-select:none}
+.code.nonum .l{padding-left:1rem}
+.code.nonum .l::before{display:none}
+.t-k{color:var(--t-k)} .t-c{color:var(--t-c)} .t-s{color:var(--t-s)} .t-m{color:var(--t-m)} .t-n{color:var(--t-n)} .t-f{color:var(--t-f)} .t-t{color:var(--t-t)} .t-v{color:var(--t-v)}
+.out{background:var(--out-bg);color:var(--out-ink);border-top:1.5px solid var(--ink)}
+.out-label{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.3rem 1rem;padding:.5rem 1rem 0;font:700 .66rem/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--out-dim)}
+.out-legend{letter-spacing:.02em;text-transform:none;font-weight:500;font-size:.74rem}
+.out pre{padding:.4rem 1rem .85rem;color:var(--out-ink);counter-reset:none}
+.out .typed{color:var(--out-typed);font-weight:600;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:.22em}
+.out.err{background:var(--out-bg)}
+.out.err .out-label span{color:var(--out-err)}
+.out.err pre{color:var(--out-err)}
+.out+.out{border-top:1px dashed var(--out-dim)}
+code.py{white-space:nowrap}
+
+/* ===== Таблицы ===== */
+.tbl-wrap{margin:1.3rem 0;overflow-x:auto;border:1.5px solid var(--ink);border-radius:14px 14px 14px 3px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th,td{padding:.55rem .85rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font:700 .7rem/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);background:var(--paper-2);border-bottom:1.5px solid var(--ink);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+table.wide{min-width:640px}
+td code{white-space:nowrap}
+.evals td:nth-child(2){white-space:nowrap}
+code.res{font-weight:600;background:var(--sun-soft);border-color:transparent;color:var(--ink)}
+code.res.bad{background:var(--err-soft);color:var(--err)}
+
+/* ===== Тренажёры ===== */
+.lab{margin:2rem 0;border:1.5px solid var(--ink);border-radius:18px 18px 18px 4px;background:var(--card);box-shadow:6px 6px 0 var(--sea);overflow:hidden}
+.lab-head{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem;padding:.7rem 1rem;background:var(--sea-soft);border-bottom:1.5px solid var(--ink)}
+.lab-head b{padding:.3rem .6rem;border:1.5px solid var(--ink);border-radius:99px;background:var(--card);font:700 .66rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase}
+.lab-head h3{margin:0;font-size:1.12rem}
+.lab-head h3::before{display:none}
+.lab-body{padding:1rem}
+.lab-body>p:first-child{color:var(--ink-2);font-size:.95rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:38px;padding:.3rem .85rem;border:1.5px solid var(--ink);border-radius:10px;background:var(--sun);color:#1D1B2E;font-weight:650;font-size:.9rem;cursor:pointer;box-shadow:3px 3px 0 var(--shade)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shade)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn[disabled]{opacity:.45;cursor:default;box-shadow:none;transform:none}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
+.field{display:flex;flex-direction:column;gap:.25rem;font-size:.84rem;font-weight:600;color:var(--ink-2);min-width:0}
+.field input[type="text"],.field input[type="number"]{width:100%;height:40px;padding:0 .7rem;border:1.5px solid var(--ink);border-radius:10px;background:var(--code-bg);color:var(--t-o);font:500 1rem/1 var(--f-mono)}
+input[type="range"]{width:100%;accent-color:var(--accent-bg);height:28px}
+.say{margin:.9rem 0 0;padding:.7rem .85rem;border-left:4px solid var(--sea);background:var(--paper-2);border-radius:0 10px 10px 0;font-size:.95rem}
+.mono{font-family:var(--f-mono)}
+
+/* ===== Проверь себя ===== */
+.quiz{counter-reset:q;margin-top:1.2rem}
+.quiz-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem;margin:1rem 0}
+.quiz-score{font-weight:650}
+.q{counter-increment:q;margin:.8rem 0;border:1.5px solid var(--ink);border-radius:14px 14px 14px 3px;background:var(--card)}
+.q[open]{box-shadow:5px 5px 0 var(--plum)}
+.q summary{display:grid;grid-template-columns:2.4rem 1fr 1.6rem;gap:.5rem;align-items:start;padding:.85rem .9rem;cursor:pointer;list-style:none;font-weight:600}
+.q summary::-webkit-details-marker{display:none}
+.q summary::before{content:counter(q);font:italic 700 1.6rem/1 var(--f-display);color:var(--plum);text-align:center}
+.q summary::after{content:"+";display:grid;place-items:center;width:1.6rem;height:1.6rem;border:1.5px solid var(--ink);border-radius:50%;font:700 1rem/1 var(--f-mono);background:var(--plum-soft)}
+.q[open] summary::after{content:"–"}
+.q .a{padding:0 .9rem .9rem 3.4rem}
+.q .a>:last-child{margin-bottom:0}
+.q .mark{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}
+.q .mark .btn{min-height:32px;font-size:.8rem;box-shadow:2px 2px 0 var(--shade)}
+.q[data-mark="yes"]{border-color:var(--ok)} .q[data-mark="no"]{border-color:var(--err)}
+.q[data-mark="yes"] summary::before{color:var(--ok)} .q[data-mark="no"] summary::before{color:var(--err)}
+.q .mark .btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+.foot{margin-top:3.5rem;padding:1.2rem 1.2rem;border:1.5px solid var(--ink);border-radius:18px 18px 18px 4px;background:var(--ink);color:var(--paper)}
+.foot h2{font-size:1.35rem;margin-bottom:.4rem}
+.foot p{margin:0;opacity:.9}
+
+/* ===== Общие части тренажёров ===== */
+.chipset{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0 0}
+.chipset button{min-height:34px;padding:.2rem .7rem;border:1.5px solid var(--ink);border-radius:99px;background:var(--paper);cursor:pointer;font:600 .86rem/1 var(--f-mono)}
+.chipset button:hover{background:var(--sun-soft)}
+.chipset button[aria-pressed="true"],.chipset button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.lab .tbl-wrap{margin:.9rem 0 0;border-radius:12px}
+.lab td.bad{color:var(--err);font-weight:600}
+.lab td .v{font:600 .95rem/1.4 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.bug-case[hidden]{display:none}
+.bug-code{display:grid;gap:.25rem;padding:.55rem;border:1.5px solid var(--ink);border-radius:12px;background:var(--code-bg);overflow-x:auto}
+.bug-line{display:flex;gap:.8rem;align-items:baseline;width:100%;min-width:max-content;padding:.38rem .65rem;border:1.5px solid transparent;border-radius:8px;background:transparent;cursor:pointer;text-align:left;font:.9rem/1.5 var(--f-mono);color:var(--t-o)}
+.bug-line code{font-size:inherit;white-space:pre}
+.bug-line:hover{border-color:var(--ink-3)}
+.bug-line.hit{border-color:var(--ok);box-shadow:inset 5px 0 0 var(--ok)}
+.bug-line.miss{border-color:var(--err);box-shadow:inset 5px 0 0 var(--err)}
+.bug-n{color:var(--code-num);user-select:none}
+.bug-msg{margin:.8rem 0 0;padding:.75rem .95rem;border-radius:10px;background:var(--out-bg);color:var(--out-err);font:.84rem/1.55 var(--f-mono);overflow-x:auto}
+.bug-msg[hidden],.bug-why[hidden]{display:none}
+.bug-why{border-left-color:var(--ok)}
+.bug-q{font-weight:650;margin:.2rem 0 .7rem}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1rem}
+.sum-grid ol{margin:0;padding-left:1.3em}
+.sum-grid dl{margin:0}
+.sum-grid dt{font-weight:700;margin-top:.55rem}
+.sum-grid dt:first-child{margin-top:0}
+.sum-grid dd{margin:0;color:var(--ink-2);font-size:.95rem}
+
+.steplist{list-style:none;margin:.9rem 0 0;padding:.5rem;border:1.5px solid var(--ink);border-radius:12px;background:var(--code-bg);font:.9rem/1.5 var(--f-mono);counter-reset:n;color:var(--t-o);overflow-x:auto}
+.steplist li{counter-increment:n;display:flex;align-items:center;gap:.7rem;margin:.12rem 0;padding:.25rem .5rem .25rem 2.1rem;border:1.5px solid transparent;border-radius:8px;position:relative;min-width:max-content}
+.steplist li::before{content:counter(n);position:absolute;left:.6rem;color:var(--code-num)}
+.steplist li code{background:none;border:0;padding:0;white-space:pre;font-size:inherit}
+.steplist .flag{margin-left:auto;padding:.1rem .55rem;border:1.5px solid transparent;border-radius:99px;font:700 .72rem/1.5 var(--f-body);white-space:nowrap}
+.steplist li.yes{border-color:var(--ok);box-shadow:inset 4px 0 0 var(--ok)}
+.steplist li.yes .flag{color:var(--ok);border-color:var(--ok)}
+.steplist li.no .flag{color:var(--err);border-color:var(--err)}
+.steplist li.skip .flag{color:var(--ink-3);border-color:var(--line)}
+.steplist li.run{border-color:var(--accent-bg);box-shadow:inset 4px 0 0 var(--accent-bg)}
+.steplist li.run .flag{color:var(--accent);border-color:var(--accent-bg)}
+.nm-empty{color:var(--ink-2);font-size:.92rem;align-self:center}
+.screen{margin:.9rem 0 0;padding:.6rem .9rem;border-radius:10px;background:var(--out-bg);color:var(--out-ink);font:.9rem/1.5 var(--f-mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.screen small{display:block;font:700 .66rem/1.4 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--out-dim)}
+.bug-msg.plain{color:var(--out-ink)}
+
+.steplist .flag:empty{display:none}
+
+code.wrap{white-space:normal!important;overflow-wrap:anywhere}
+
+/* ===== Адаптив ===== */
+@media (max-width:1023px){
+  .shell{display:block}
+  main{max-width:780px;margin:0 auto}
+  .toc-btn{display:inline-flex}
+  .toc{position:fixed;z-index:45;top:var(--top);left:0;right:0;margin:0;max-height:calc(100vh - var(--top) - 3rem);padding:1rem;background:var(--paper);border-bottom:1.5px solid var(--ink);box-shadow:0 14px 30px rgba(0,0,0,.25);display:none}
+  .toc.open{display:block}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .themes button span{display:none}
+  .themes button{padding:0 .58rem}
+  .brand small{display:none}
+  .toc-btn span{display:none}
+  .code,.lab,.note,.lead{box-shadow:3px 3px 0 var(--shade)}
+  .note{box-shadow:3px 3px 0 var(--c)} .lab{box-shadow:3px 3px 0 var(--sea)} .lead{box-shadow:3px 3px 0 var(--accent-bg)}
+  .code pre{font-size:.8rem}
+  .code .l{padding-left:2.7rem}
+  .code .l::before{width:2rem}
+  .q .a{padding-left:.9rem}
+  th,td{padding:.5rem .65rem}
+}
+@media print{
+  .topbar,.progress,.toc,.copy,.lab,.quiz-bar,.mark{display:none!important}
+  .shell{display:block}
+  .q .a{display:block}
+  body{font-size:11pt}
+}
+
+
+/* ===== Только для этой лекции ===== */
+.cells{display:flex;gap:4px;margin:.9rem 0 0;padding:.6rem;border:1.5px dashed var(--ink-3);border-radius:12px;overflow-x:auto;min-height:4.6rem;align-items:flex-start}
+.cellx{flex:none;display:grid;justify-items:center;gap:2px;min-width:2.6rem;font-family:var(--f-mono)}
+.cellx small{font-size:.7rem;color:var(--ink-2);min-height:.9rem}
+.cellx b{display:grid;place-items:center;min-width:2.5rem;height:2.4rem;padding:0 .45rem;border:1.5px solid var(--ink);border-radius:8px;background:var(--card);font-size:.95rem;white-space:pre}
+.cellx.on b{background:var(--sun);color:#1D1B2E;box-shadow:2px 2px 0 var(--shade)}
+.cellx.mid b{background:var(--accent-bg);color:var(--on-accent);box-shadow:2px 2px 0 var(--shade)}
+.cellx.off b{border-style:dashed;background:var(--paper-2);color:var(--ink-3)}
+.cellx.hit b{background:var(--ok-soft);color:var(--ink);border-color:var(--ok);box-shadow:2px 2px 0 var(--ok)}
+.cells.tight{gap:3px}
+.tight .cellx{flex:1 0 1.6rem;min-width:1.6rem}
+.tight .cellx b{min-width:0;width:100%;padding:0;font-size:.82rem}
+.tight .cellx small{font-size:.64rem}
+.expr{margin:.9rem 0 0;padding:.6rem .9rem;border:1.5px solid var(--ink);border-radius:12px;background:var(--code-bg);font:600 .95rem/1.6 var(--f-mono);color:var(--t-o);overflow-x:auto;white-space:pre}
+.expr .res{color:var(--t-n)} .expr .bad{color:var(--err)} .expr .str{color:var(--t-s)}
+.pl-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:.7rem 1rem;margin-top:.8rem}
+.pl-buttons{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}
+.pl-buttons button{min-height:36px;padding:.2rem .7rem;border:1.5px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;font:600 .85rem/1 var(--f-mono);box-shadow:2px 2px 0 var(--shade)}
+.pl-buttons button:hover{background:var(--sun-soft)}
+.pl-buttons button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shade)}
+.al-grid{display:grid;grid-template-columns:minmax(0,14rem) minmax(0,1fr);gap:1rem;align-items:stretch;margin-top:.9rem}
+.al-grid .steplist{margin:0}
+.al-mem{display:flex;flex-wrap:wrap;gap:1.1rem;min-height:9rem;padding:1rem;border:1.5px dashed var(--ink-3);border-radius:12px;background:var(--paper-2);align-items:flex-end}
+.al-obj{display:flex;flex-direction:column;align-items:center}
+.al-badges{display:flex;gap:.35rem;min-height:2.1rem;align-items:flex-end}
+.al-badge{position:relative;padding:.22rem .65rem;border:1.5px solid var(--ink);border-radius:8px 8px 8px 2px;background:var(--sun);color:#1D1B2E;font:700 .95rem/1.2 var(--f-mono)}
+.al-badge::after{content:"";position:absolute;left:50%;bottom:-.8rem;width:1.5px;height:.75rem;background:var(--ink)}
+.al-box{margin-top:.75rem;padding:.55rem .8rem;border:1.5px solid var(--ink);border-radius:12px;background:var(--card);text-align:center;box-shadow:3px 3px 0 var(--shade)}
+.al-box b{display:block;font:700 1.02rem/1.3 var(--f-mono);white-space:nowrap}
+.al-box small{font:600 .74rem/1 var(--f-mono);color:var(--sea)}
+#al-count,#bs-count{font-size:.86rem;color:var(--ink-2);font-weight:600}
+.bs-row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;margin-top:.8rem}
+.bs-row .field{flex:1 1 8rem}
+@media (max-width:640px){ .al-grid{grid-template-columns:1fr} .pl-fields{grid-template-columns:1fr} }
+/* Из лекции 5: тренажёр «Гардероб» */
+.two-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:.7rem 1rem;margin-top:.8rem}
+.op-buttons{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}
+.op-buttons button{min-height:36px;padding:.2rem .7rem;border:1.5px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;font:600 .85rem/1 var(--f-mono);box-shadow:2px 2px 0 var(--shade)}
+.op-buttons button:hover{background:var(--sun-soft)}
+.op-buttons button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shade)}
+.kv{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.9rem;padding:.7rem;border:1.5px dashed var(--ink-3);border-radius:12px;min-height:4.4rem;align-items:flex-start}
+.kv div{display:flex;align-items:stretch;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;font:600 .9rem/1.3 var(--f-mono);box-shadow:2px 2px 0 var(--shade)}
+.kv div b{padding:.35rem .6rem;background:var(--sun);color:#1D1B2E}
+.kv div span{padding:.35rem .6rem;background:var(--card);border-left:1.5px solid var(--ink)}
+.kv div.hit{box-shadow:2px 2px 0 var(--ok);border-color:var(--ok)}
+/* В номере три знака («4–5»), поэтому он мельче обычного */
+.hero-num{font-size:clamp(7.5rem,25vw,16rem)}
+.hero-num,.hero-num::after{white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="topbar">
+  <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc" aria-label="Оглавление">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h8"/></svg>
+    <span>Оглавление</span>
+  </button>
+  <a class="brand" href="#top"><b>Py</b><span>Л4–5 · Списки, кортежи и словари <small>· Модуль 1</small></span></a>
+  <div class="themes" role="group" aria-label="Тема оформления">
+    <button type="button" data-set="light" aria-pressed="false" title="Светлая тема" aria-label="Светлая тема">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.2 1.2M11.8 11.8 13 13M13 3l-1.2 1.2M4.2 11.8 3 13"/></svg><span>Светлая</span></button>
+    <button type="button" data-set="dark" aria-pressed="false" title="Тёмная тема" aria-label="Тёмная тема">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 9.6A6 6 0 0 1 6.4 2.5a6 6 0 1 0 7.1 7.1Z"/></svg><span>Тёмная</span></button>
+    <button type="button" data-set="system" aria-pressed="false" title="Как в системе" aria-label="Тема как в системе">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="8.5" rx="1.5"/><path d="M5.5 14h5M8 11v3"/></svg><span>Системная</span></button>
+  </div>
+</header>
+
+<div class="shell" id="top">
+<nav class="toc" id="toc" aria-label="Оглавление">
+  <h2>Оглавление</h2>
+  <ol>
+<li><a href="#start"><span class="toc-n">01</span><span>Старт: что умеем и план</span></a></li>
+<li><a href="#list"><span class="toc-n">02</span><span>Список</span></a></li>
+<li><a href="#methods"><span class="toc-n">03</span><span>Методы списка</span></a></li>
+<li><a href="#loop"><span class="toc-n">04</span><span>Перебор и готовые функции</span></a></li>
+<li><a href="#split"><span class="toc-n">05</span><span>Строка и список: split и join</span></a></li>
+<li><a href="#tuple"><span class="toc-n">06</span><span>Кортежи</span></a></li>
+<li><a href="#dict"><span class="toc-n">07</span><span>Словарь</span></a></li>
+<li><a href="#dictloop"><span class="toc-n">08</span><span>Перебор и подсчёт</span></a></li>
+<li><a href="#nested"><span class="toc-n">09</span><span>Словарь записей</span></a></li>
+<li><a href="#library"><span class="toc-n">10</span><span>Практикум: библиотека</span></a></li>
+<li><a href="#summary"><span class="toc-n">11</span><span>Итоги лекции</span></a></li>
+<li><a href="#quiz"><span class="toc-n">12</span><span>Проверь себя</span></a></li>
+  </ol>
+</nav>
+
+<main>
+<section class="hero">
+  <div class="hero-num" data-n="4–5" aria-hidden="true">4–5</div>
+  <p class="kicker"><span>Модуль 1 · Фундамент</span><span>Лекции 4 и 5 — сжатый блок</span></p>
+  <h1>Списки, кортежи и словари <em>хранить много и находить сразу</em></h1>
+  <p class="lead">Сегодня две темы в одной. Программа научится хранить сколько угодно значений, разбирать строку на слова и находить запись по номеру за один шаг. В конце соберём базу книг с меню — так же устроены задания на контрольных.</p>
+  <ul class="chips"><li>около 60–70 минут</li><li>8 разделов теории</li><li>4 тренажёра</li><li>8 вопросов в конце</li></ul>
+</section>
+
+<!-- ============ СТАРТ ============ -->
+<section class="sec" id="start" data-toc="Старт: что умеем и план">
+  <header class="sec-head"><span class="sec-num">0</span><div><h2>С чего начинаем</h2><p>Что уже умеем и куда идём</p></div></header>
+  <p>В прошлой теме программа читала числа в цикле и копила сумму. Но сами числа она тут же забывала: вернуться к ним, отсортировать или найти нужное было нельзя. Сегодня программа научится хранить все значения сразу и находить нужное по номеру или по названию.</p>
+  <div class="cols">
+    <div class="tile b"><h3>Что уже умеем</h3><ul><li>условия и циклы <code>while</code> и <code>for</code>;</li><li>накопители: сумма, счётчик, наибольшее;</li><li>строки: индексы, срезы, <code>lower()</code> и <code>strip()</code>;</li><li>меню в цикле <code>while True</code>.</li></ul></div>
+    <div class="tile c"><h3>Что будем уметь через час</h3><ul><li>хранить много значений в списке;</li><li>добавлять, удалять и сортировать;</li><li>разбирать строку на слова;</li><li>хранить записи в кортежах;</li><li>находить значение по ключу в словаре;</li><li>считать, сколько раз встречается слово;</li><li>вести базу записей по номеру с меню.</li></ul></div>
+  </div>
+  <h3>План занятия</h3>
+  <ol class="plan">
+    <li><div><b>Список.</b> <span>Создание, индексы, изменение.</span></div></li>
+    <li><div><b>Методы списка.</b> <span>Добавить, удалить, отсортировать.</span></div></li>
+    <li><div><b>Перебор.</b> <span>Номера, готовые функции, отбор.</span></div></li>
+    <li><div><b>split и join.</b> <span>Строка на слова и обратно.</span></div></li>
+    <li><div><b>Кортежи.</b> <span>Записи, которые нельзя изменить.</span></div></li>
+    <li><div><b>Словарь.</b> <span>Значение по ключу.</span></div></li>
+    <li><div><b>Перебор и подсчёт.</b> <span>Сколько раз встречается каждое слово.</span></div></li>
+    <li><div><b>Словарь записей.</b> <span>База по уникальному номеру.</span></div></li>
+    <li><div><b>Практикум.</b> <span>Библиотека с меню, как на контрольной.</span></div></li>
+  </ol>
+  <div class="note kr"><span class="tag">На КР</span>
+    <p>Третья контрольная — про функции. Но функции работают с данными: со списком студентов, со словарём оценок. Поэтому сначала нужны списки и словари. Здесь из лекций 4 и 5 собрано всё, что для этого понадобится. Множества, таблицы из списков и бинарный поиск разберём после контрольной.</p>
+  </div>
+</section>
+
+<!-- ============ 1 ============ -->
+<section class="sec" id="list" data-toc="Список">
+  <header class="sec-head"><span class="sec-num">1</span><div><h2>Список</h2><p>Много значений по порядку</p></div></header>
+  <p><span class="term">Список</span> — это набор значений, которые хранятся по порядку под одним именем. Список пишут в квадратных скобках, значения разделяют запятыми. Каждое значение называется <span class="term">элементом</span>. Тип списка — <code>list</code>.</p>
+  <figure class="code"><figcaption><span class="code-name">list_basics.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">playlist</span> = [<span class="t-s">"Numb"</span>, <span class="t-s">"Believer"</span>, <span class="t-s">"Faded"</span>]</span>
+<span class="l"><span class="t-v">empty</span> = []                         <span class="t-m"># пустой список</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">playlist</span>)</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-f">len</span>(<span class="t-v">playlist</span>))               <span class="t-m"># сколько элементов</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">playlist</span>[<span class="t-n">0</span>], <span class="t-v">playlist</span>[-<span class="t-n">1</span>])   <span class="t-m"># индексы — как у строк, с нуля</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">playlist</span>[<span class="t-n">1</span>:])                <span class="t-m"># срезы тоже работают</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-s">"Faded"</span> <span class="t-k">in</span> <span class="t-v">playlist</span>)         <span class="t-m"># есть ли такой элемент</span></span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">['Numb', 'Believer', 'Faded']
+3
+Numb Faded
+['Believer', 'Faded']
+True</pre></div></figure>
+  <p>Всё знакомое по строкам работает и здесь: индексы с нуля, отрицательные индексы, срезы, <code>len()</code>, оператор <code>in</code>, циклы. Есть и главное отличие: список <span class="term">изменяемый</span>. Его элемент можно заменить.</p>
+  <figure class="code"><figcaption><span class="code-name">change.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">playlist</span> = [<span class="t-s">"Numb"</span>, <span class="t-s">"Believer"</span>, <span class="t-s">"Faded"</span>]</span>
+<span class="l"><span class="t-v">playlist</span>[<span class="t-n">1</span>] = <span class="t-s">"Thunder"</span>            <span class="t-m"># со строкой так нельзя</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">playlist</span>)</span>
+<span class="l"><span class="t-f">print</span>([<span class="t-n">1</span>, <span class="t-n">2</span>] + [<span class="t-n">3</span>])                <span class="t-m"># плюс склеивает списки</span></span>
+<span class="l"><span class="t-f">print</span>([<span class="t-n">0</span>] * <span class="t-n">5</span>)                     <span class="t-m"># умножение повторяет список</span></span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">['Numb', 'Thunder', 'Faded']
+[1, 2, 3]
+[0, 0, 0, 0, 0]</pre></div></figure>
+  <div class="note"><span class="tag">Важно</span>
+    <p>В списке могут лежать значения любых типов, даже вперемешку: <code>[1, 2, "Hi"]</code>. Но обычно в списке хранят однотипные вещи: только песни, только оценки. Так с ним проще работать в цикле.</p>
+  </div>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Список — значения по порядку в квадратных скобках.</li>
+    <li>Индексы, срезы, <code>len()</code> и <code>in</code> работают как у строк.</li>
+    <li>Список можно изменять: <code>items[0] = значение</code>.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="sec" id="methods" data-toc="Методы списка">
+  <header class="sec-head"><span class="sec-num">2</span><div><h2>Методы списка</h2><p>Добавить, удалить, найти, отсортировать</p></div></header>
+  <p>У списка есть свои методы. На слайде лектора их одиннадцать, и все нужно знать. Важное отличие от строк: методы списка меняют <strong>сам</strong> список, а не создают новый.</p>
+  <div class="tbl-wrap scroll" tabindex="0"><table class="wide">
+    <thead><tr><th>Метод</th><th>Что делает</th><th>Что возвращает</th></tr></thead>
+    <tbody>
+      <tr><td><code>append(x)</code></td><td>Добавляет <code>x</code> в конец.</td><td><code>None</code></td></tr>
+      <tr><td><code>insert(i, x)</code></td><td>Вставляет <code>x</code> на место с индексом <code>i</code>.</td><td><code>None</code></td></tr>
+      <tr><td><code>extend(other)</code></td><td>Добавляет в конец все элементы другого списка.</td><td><code>None</code></td></tr>
+      <tr><td><code>remove(x)</code></td><td>Удаляет первый элемент, равный <code>x</code>. Если такого нет — ошибка <code>ValueError</code>.</td><td><code>None</code></td></tr>
+      <tr><td><code>pop()</code>, <code>pop(i)</code></td><td>Удаляет последний элемент или элемент с индексом <code>i</code>.</td><td>Удалённый элемент</td></tr>
+      <tr><td><code>index(x)</code></td><td>Ищет <code>x</code>. Если такого нет — ошибка <code>ValueError</code>.</td><td>Индекс первого найденного</td></tr>
+      <tr><td><code>count(x)</code></td><td>Считает, сколько раз встречается <code>x</code>.</td><td>Число</td></tr>
+      <tr><td><code>sort()</code></td><td>Сортирует сам список по возрастанию.</td><td><code>None</code></td></tr>
+      <tr><td><code>reverse()</code></td><td>Переворачивает сам список.</td><td><code>None</code></td></tr>
+      <tr><td><code>copy()</code></td><td>Делает копию списка.</td><td>Новый список</td></tr>
+      <tr><td><code>clear()</code></td><td>Удаляет все элементы.</td><td><code>None</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>Значение <code>None</code> в таблице значит «ничего»: метод сделал своё дело и ничего не вернул.</p>
+  <figure class="code"><figcaption><span class="code-name">playlist.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">playlist</span> = [<span class="t-s">"Numb"</span>, <span class="t-s">"Believer"</span>, <span class="t-s">"Faded"</span>]</span>
+<span class="l"><span class="t-v">playlist</span>.<span class="t-f">append</span>(<span class="t-s">"Thunder"</span>)         <span class="t-m"># в конец</span></span>
+<span class="l"><span class="t-v">playlist</span>.<span class="t-f">insert</span>(<span class="t-n">0</span>, <span class="t-s">"Intro"</span>)        <span class="t-m"># на место с индексом 0</span></span>
+<span class="l"><span class="t-v">playlist</span>.<span class="t-f">remove</span>(<span class="t-s">"Faded"</span>)           <span class="t-m"># удалить по значению</span></span>
+<span class="l"><span class="t-v">last</span> = <span class="t-v">playlist</span>.<span class="t-f">pop</span>()              <span class="t-m"># удалить последний и вернуть</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">playlist</span>)</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">last</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">['Intro', 'Numb', 'Believer']
+Thunder</pre></div></figure>
+
+  <div class="lab" id="w-playlist">
+    <div class="lab-head"><b>Тренажёр 1</b><h3>Плейлист: методы списка</h3></div>
+    <div class="lab-body">
+      <p>Впиши песню и индекс, нажимай кнопки. Следи, что стало со списком и что метод вернул. Попробуй удалить песню, которой нет.</p>
+      <div class="pl-fields">
+        <label class="field">песня x =<input type="text" id="pl-x" value="Thunder" autocomplete="off" spellcheck="false" maxlength="12"></label>
+        <label class="field">индекс i =<input type="text" id="pl-i" value="0" inputmode="numeric" autocomplete="off" maxlength="3"></label>
+      </div>
+      <div class="pl-buttons" id="pl-buttons" role="group" aria-label="Методы списка">
+        <button type="button" data-m="append">append(x)</button>
+        <button type="button" data-m="insert">insert(i, x)</button>
+        <button type="button" data-m="remove">remove(x)</button>
+        <button type="button" data-m="pop">pop()</button>
+        <button type="button" data-m="popi">pop(i)</button>
+        <button type="button" data-m="index">index(x)</button>
+        <button type="button" data-m="count">count(x)</button>
+        <button type="button" data-m="sort">sort()</button>
+        <button type="button" data-m="reverse">reverse()</button>
+        <button type="button" data-m="clear">clear()</button>
+        <button type="button" data-m="reset">сначала</button>
+      </div>
+      <div class="cells scroll" id="pl-cells" aria-hidden="true"></div>
+      <div class="expr" id="pl-expr" aria-live="polite"></div>
+      <p class="say" id="pl-say"></p>
+    </div>
+  </div>
+
+  <h3>sort() и sorted()</h3>
+  <p>Отсортировать список можно двумя способами. Метод <code>sort()</code> меняет сам список. Функция <code>sorted()</code> список не трогает и возвращает новый, отсортированный.</p>
+  <figure class="code"><figcaption><span class="code-name">sorting.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">scores</span> = [<span class="t-n">70</span>, <span class="t-n">95</span>, <span class="t-n">80</span>]</span>
+<span class="l"><span class="t-v">ordered</span> = <span class="t-f">sorted</span>(<span class="t-v">scores</span>)           <span class="t-m"># новый список, scores цел</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">ordered</span>, <span class="t-v">scores</span>)</span>
+<span class="l"><span class="t-v">scores</span>.<span class="t-f">sort</span>()                      <span class="t-m"># сортирует сам список</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">scores</span>)</span>
+<span class="l"><span class="t-v">result</span> = <span class="t-v">scores</span>.<span class="t-f">sort</span>()             <span class="t-m"># ловушка: вернётся None</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">result</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">[70, 80, 95] [70, 95, 80]
+[70, 80, 95]
+None</pre></div></figure>
+  <div class="note warn"><span class="tag">Ловушка</span>
+    <p>Запись <code>scores = scores.sort()</code> уничтожает список: в переменной оказывается <code>None</code>. Правильно — либо <code>scores.sort()</code> отдельной строкой, либо <code>ordered = sorted(scores)</code>.</p>
+  </div>
+
+  <h3>Удаляем без ошибок</h3>
+  <p>Методы <code>remove()</code> и <code>index()</code> останавливают программу, если элемента нет. Поэтому сначала проверяют оператором <code>in</code>.</p>
+  <figure class="code"><figcaption><span class="code-name">safe_remove.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">playlist</span> = [<span class="t-s">"Numb"</span>, <span class="t-s">"Believer"</span>]</span>
+<span class="l"><span class="t-v">song</span> = <span class="t-f">input</span>(<span class="t-s">"Что удалить? "</span>)</span>
+<span class="l"><span class="t-c">if</span> <span class="t-v">song</span> <span class="t-k">in</span> <span class="t-v">playlist</span>:</span>
+<span class="l">    <span class="t-v">playlist</span>.<span class="t-f">remove</span>(<span class="t-v">song</span>)</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-s">"Осталось:"</span>, <span class="t-v">playlist</span>)</span>
+<span class="l"><span class="t-c">else</span>:</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-s">"Такой песни нет"</span>)</span></code></pre><div class="out"><div class="out-label"><span>Запуск 1</span><span class="out-legend"><span class="typed">так</span> выделен ввод с клавиатуры</span></div><pre class="scroll" tabindex="0">Что удалить? <span class="typed">Faded</span>
+Такой песни нет</pre></div><div class="out"><div class="out-label"><span>Запуск 2</span></div><pre class="scroll" tabindex="0">Что удалить? <span class="typed">Numb</span>
+Осталось: ['Believer']</pre></div></figure>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Методы списка меняют сам список. Большинство возвращает <code>None</code>.</li>
+    <li><code>pop()</code> возвращает удалённый элемент, <code>index()</code> и <code>count()</code> — число.</li>
+    <li><code>sort()</code> сортирует на месте, <code>sorted()</code> возвращает новый список.</li>
+    <li>Перед <code>remove()</code> и <code>index()</code> проверяем <code>in</code>.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="sec" id="loop" data-toc="Перебор и готовые функции">
+  <header class="sec-head"><span class="sec-num">3</span><div><h2>Перебор и готовые функции</h2><p>Среднее, медиана, отбор</p></div></header>
+  <p>По списку идут циклом <code>for</code> — так же, как по строке. Если нужен ещё и номер элемента, помогает функция <code>enumerate()</code>: она выдаёт пары «номер и элемент». Второй аргумент задаёт, с какого числа начать счёт.</p>
+  <figure class="code"><figcaption><span class="code-name">loop.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">playlist</span> = [<span class="t-s">"Numb"</span>, <span class="t-s">"Believer"</span>, <span class="t-s">"Thunder"</span>]</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">song</span> <span class="t-k">in</span> <span class="t-v">playlist</span>:</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-v">song</span>)</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">number</span>, <span class="t-v">song</span> <span class="t-k">in</span> <span class="t-f">enumerate</span>(<span class="t-v">playlist</span>, <span class="t-n">1</span>):</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-k">f</span><span class="t-s">"</span><span class="t-k">{</span><span class="t-v">number</span><span class="t-k">}</span><span class="t-s">. </span><span class="t-k">{</span><span class="t-v">song</span><span class="t-k">}</span><span class="t-s">"</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">Numb
+Believer
+Thunder
+1. Numb
+2. Believer
+3. Thunder</pre></div></figure>
+  <p>Цикл <code>for song in playlist</code> только читает элементы. Чтобы их <strong>менять</strong>, нужен индекс: идём по номерам через <code>range(len(...))</code>.</p>
+  <figure class="code"><figcaption><span class="code-name">double.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">prices</span> = [<span class="t-n">10</span>, <span class="t-n">25</span>, <span class="t-n">40</span>]</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">i</span> <span class="t-k">in</span> <span class="t-f">range</span>(<span class="t-f">len</span>(<span class="t-v">prices</span>)):</span>
+<span class="l">    <span class="t-v">prices</span>[<span class="t-v">i</span>] = <span class="t-v">prices</span>[<span class="t-v">i</span>] * <span class="t-n">2</span>      <span class="t-m"># меняем элемент по индексу</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">prices</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">[20, 50, 80]</pre></div></figure>
+
+  <h3>Готовые функции</h3>
+  <p>Сумму, наименьшее и наибольшее в прошлой теме мы искали циклом и накопителями. Для списков есть готовые функции.</p>
+  <div class="tbl-wrap scroll" tabindex="0"><table class="evals"><thead><tr><th>Выражение</th><th>Результат</th><th>Пояснение</th></tr></thead><tbody><tr><td><code><span class="t-f">len</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">5</code></td><td>Сколько элементов.</td></tr><tr><td><code><span class="t-f">sum</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">75</code></td><td>Сумма.</td></tr><tr><td><code><span class="t-f">min</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">7</code></td><td>Наименьшее.</td></tr><tr><td><code><span class="t-f">max</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">30</code></td><td>Наибольшее.</td></tr><tr><td><code><span class="t-f">sum</span>(<span class="t-v">temps</span>) / <span class="t-f">len</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">15.0</code></td><td>Среднее: сумма, делённая на количество.</td></tr><tr><td><code><span class="t-f">sorted</span>(<span class="t-v">temps</span>)</code></td><td><code class="res">[7, 7, 12, 19, 30]</code></td><td>Новый отсортированный список.</td></tr></tbody></table></div>
+  <p>Писать такие циклы самому всё равно нужно уметь: на контрольной могут попросить найти наибольшее без готовой функции.</p>
+
+  <h3>Отбор, среднее и медиана</h3>
+  <p>Частая задача: выбрать из списка элементы, которые подходят под условие. Приём такой: создаём пустой список и в цикле добавляем в него подходящие элементы.</p>
+  <figure class="code"><figcaption><span class="code-name">stats.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">temps</span> = [<span class="t-n">12</span>, <span class="t-n">7</span>, <span class="t-n">30</span>, <span class="t-n">7</span>, <span class="t-n">19</span>]</span>
+<span class="l"><span class="t-v">average</span> = <span class="t-f">sum</span>(<span class="t-v">temps</span>) / <span class="t-f">len</span>(<span class="t-v">temps</span>)</span>
+<span class="l"><span class="t-v">warm</span> = []                          <span class="t-m"># дни теплее среднего</span></span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">value</span> <span class="t-k">in</span> <span class="t-v">temps</span>:</span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">value</span> &gt; <span class="t-v">average</span>:</span>
+<span class="l">        <span class="t-v">warm</span>.<span class="t-f">append</span>(<span class="t-v">value</span>)</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">average</span>, <span class="t-v">warm</span>)</span>
+<span class="l"></span>
+<span class="l"><span class="t-v">ordered</span> = <span class="t-f">sorted</span>(<span class="t-v">temps</span>)            <span class="t-m"># для медианы нужен порядок</span></span>
+<span class="l"><span class="t-v">middle</span> = <span class="t-f">len</span>(<span class="t-v">ordered</span>) // <span class="t-n">2</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">ordered</span>, <span class="t-v">ordered</span>[<span class="t-v">middle</span>])</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">15.0 [30, 19]
+[7, 7, 12, 19, 30] 12</pre></div></figure>
+  <p><span class="term">Медиана</span> — это значение, которое стоит в середине, если расставить числа по возрастанию. Когда чисел нечётное количество, середина одна: элемент с индексом <code>len // 2</code>. Когда чётное — берут среднее двух соседних: <code>(ordered[middle - 1] + ordered[middle]) / 2</code>.</p>
+
+  <div class="lab" id="w-stats">
+    <div class="lab-head"><b>Тренажёр 2</b><h3>Статистика списка</h3></div>
+    <div class="lab-body">
+      <p>Впиши целые числа через пробел. Жёлтым выделена середина отсортированного списка: по ней считается медиана.</p>
+      <label class="field">Числа через пробел:<input type="text" id="st-text" value="12 7 30 7 19" autocomplete="off" spellcheck="false" maxlength="48"></label>
+      <div class="chipset" id="st-presets" role="group" aria-label="Готовые примеры">
+        <button type="button" data-v="12 7 30 7 19">пять чисел</button>
+        <button type="button" data-v="4 10 6 8">четыре числа</button>
+        <button type="button" data-v="5">одно число</button>
+        <button type="button" data-v="3 x 8">с ошибкой</button>
+      </div>
+      <div class="cells scroll" id="st-cells" aria-hidden="true"></div>
+      <div class="tbl-wrap scroll" tabindex="0"><table>
+        <thead><tr><th>Выражение</th><th>Результат</th></tr></thead>
+        <tbody id="st-rows"></tbody>
+      </table></div>
+      <p class="say" id="st-say" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li><code>for x in items</code> читает элементы, <code>for i in range(len(items))</code> позволяет их менять.</li>
+    <li><code>enumerate(items, 1)</code> выдаёт номер вместе с элементом.</li>
+    <li><code>len</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>sorted</code> — готовые функции для списков.</li>
+    <li>Отбор: пустой список и <code>append()</code> в цикле с условием.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="sec" id="split" data-toc="Строка и список: split и join">
+  <header class="sec-head"><span class="sec-num">4</span><div><h2>Строка и список</h2><p>split и join</p></div></header>
+  <p>Вводить десять чисел десятью вопросами неудобно. Проще ввести их одной строкой через пробел. Метод строки <code>split()</code> режет строку на части и возвращает список. Обратную работу делает метод <code>join()</code>: он склеивает список строк в одну строку.</p>
+  <div class="tbl-wrap scroll" tabindex="0"><table class="evals"><thead><tr><th>Выражение</th><th>Результат</th><th>Пояснение</th></tr></thead><tbody><tr><td><code><span class="t-s">"мама мыла раму"</span>.<span class="t-f">split</span>()</code></td><td><code class="res">['мама', 'мыла', 'раму']</code></td><td>Без аргумента режет по пробелам.</td></tr><tr><td><code><span class="t-s">"Мама мыла РАМУ"</span>.<span class="t-f">lower</span>().<span class="t-f">split</span>()</code></td><td><code class="res">['мама', 'мыла', 'раму']</code></td><td>Сначала маленькие буквы, потом слова.</td></tr><tr><td><code><span class="t-s">"12 7 30"</span>.<span class="t-f">split</span>()</code></td><td><code class="res">['12', '7', '30']</code></td><td>Внимание: получились строки, а не числа.</td></tr><tr><td><code><span class="t-s">"хлеб,сыр,чай"</span>.<span class="t-f">split</span>(<span class="t-s">","</span>)</code></td><td><code class="res">['хлеб', 'сыр', 'чай']</code></td><td>Можно резать по другому знаку.</td></tr><tr><td><code><span class="t-s">" "</span>.<span class="t-f">join</span>([<span class="t-s">"мама"</span>, <span class="t-s">"мыла"</span>, <span class="t-s">"раму"</span>])</code></td><td><code class="res">'мама мыла раму'</code></td><td>Склеить через пробел.</td></tr><tr><td><code><span class="t-s">"-"</span>.<span class="t-f">join</span>([<span class="t-s">"2026"</span>, <span class="t-s">"11"</span>, <span class="t-s">"19"</span>])</code></td><td><code class="res">'2026-11-19'</code></td><td>Склеить через дефис.</td></tr></tbody></table></div>
+  <p>Метод <code>split()</code> всегда выдаёт строки. Чтобы получить числа, каждую часть превращают через <code>int()</code> в цикле.</p>
+  <figure class="code"><figcaption><span class="code-name">to_int.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">numbers</span> = []</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">part</span> <span class="t-k">in</span> <span class="t-f">input</span>(<span class="t-s">"Числа через пробел: "</span>).<span class="t-f">split</span>():</span>
+<span class="l">    <span class="t-v">numbers</span>.<span class="t-f">append</span>(<span class="t-t">int</span>(<span class="t-v">part</span>))      <span class="t-m"># часть превращаем в число</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">numbers</span>, <span class="t-f">sum</span>(<span class="t-v">numbers</span>))</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span><span class="out-legend"><span class="typed">так</span> выделен ввод с клавиатуры</span></div><pre class="scroll" tabindex="0">Числа через пробел: <span class="typed">12 7 30</span>
+[12, 7, 30] 49</pre></div></figure>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li><code>split()</code> режет строку на список строк, <code>join()</code> склеивает список строк.</li>
+    <li>Методы можно ставить цепочкой: <code>text.lower().split()</code>.</li>
+    <li>Числа из строки: <code>split()</code>, потом <code>int()</code> для каждой части.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="sec" id="tuple" data-toc="Кортежи">
+  <header class="sec-head"><span class="sec-num">5</span><div><h2>Кортежи</h2><p>Записи, которые нельзя изменить</p></div></header>
+  <p><span class="term">Кортеж</span> похож на список, но его нельзя изменить. Пишут его в круглых скобках. Тип — <code>tuple</code>. Кортежем удобно хранить <strong>запись</strong>: несколько значений, которые вместе описывают одну вещь. Песня — это название, исполнитель и год.</p>
+  <figure class="code"><figcaption><span class="code-name">song.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">song</span> = (<span class="t-s">"Numb"</span>, <span class="t-s">"Linkin Park"</span>, <span class="t-n">2003</span>)   <span class="t-m"># запись из трёх полей</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">song</span>[<span class="t-n">0</span>], <span class="t-f">len</span>(<span class="t-v">song</span>))              <span class="t-m"># индексы как у списка</span></span>
+<span class="l"><span class="t-v">title</span>, <span class="t-v">artist</span>, <span class="t-v">year</span> = <span class="t-v">song</span>             <span class="t-m"># распаковка по именам</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">artist</span>, <span class="t-v">year</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">Numb 3
+Linkin Park 2003</pre></div></figure>
+  <p>Вторая строка с конца называется <span class="term">распаковкой</span>. Слева столько имён, сколько значений в кортеже. Каждое имя получает своё значение. А вот изменить кортеж нельзя.</p>
+  <figure class="code"><figcaption><span class="code-name">frozen.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">song</span> = (<span class="t-s">"Numb"</span>, <span class="t-s">"Linkin Park"</span>, <span class="t-n">2003</span>)</span>
+<span class="l"><span class="t-v">song</span>[<span class="t-n">2</span>] = <span class="t-n">2004</span></span></code></pre><div class="out err"><div class="out-label"><span>Ошибка</span></div><pre class="scroll" tabindex="0">Traceback (most recent call last):
+  File "frozen.py", line 2, in &lt;module&gt;
+    song[2] = 2004
+TypeError: 'tuple' object does not support item assignment</pre></div></figure>
+
+  <h3>Список кортежей: набор записей</h3>
+  <p>Самая полезная связка: каждая запись — кортеж, а все записи вместе — список. Записи не меняются, поэтому кортеж. Набор растёт и уменьшается, поэтому список.</p>
+  <figure class="code"><figcaption><span class="code-name">cities.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">cities</span> = [(<span class="t-s">"Берлин"</span>, <span class="t-n">3.7</span>), (<span class="t-s">"Гамбург"</span>, <span class="t-n">1.9</span>), (<span class="t-s">"Мюнхен"</span>, <span class="t-n">1.5</span>)]</span>
+<span class="l"><span class="t-v">cities</span>.<span class="t-f">append</span>((<span class="t-s">"Кёльн"</span>, <span class="t-n">1.1</span>))          <span class="t-m"># кортеж: скобки двойные</span></span>
+<span class="l"></span>
+<span class="l"><span class="t-v">biggest</span> = <span class="t-v">cities</span>[<span class="t-n">0</span>]                    <span class="t-m"># ищем самый большой</span></span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">city</span> <span class="t-k">in</span> <span class="t-v">cities</span>:</span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">city</span>[<span class="t-n">1</span>] &gt; <span class="t-v">biggest</span>[<span class="t-n">1</span>]:           <span class="t-m"># сравниваем второе поле</span></span>
+<span class="l">        <span class="t-v">biggest</span> = <span class="t-v">city</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-s">"Самый большой:"</span>, <span class="t-v">biggest</span>[<span class="t-n">0</span>])</span>
+<span class="l"></span>
+<span class="l"><span class="t-v">text</span> = <span class="t-f">input</span>(<span class="t-s">"Часть названия: "</span>).<span class="t-f">strip</span>().<span class="t-f">lower</span>()</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">name</span>, <span class="t-v">population</span> <span class="t-k">in</span> <span class="t-v">cities</span>:        <span class="t-m"># распаковка прямо в цикле</span></span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">text</span> <span class="t-k">in</span> <span class="t-v">name</span>.<span class="t-f">lower</span>():</span>
+<span class="l">        <span class="t-f">print</span>(<span class="t-k">f</span><span class="t-s">"</span><span class="t-k">{</span><span class="t-v">name</span><span class="t-k">}</span><span class="t-s">: </span><span class="t-k">{</span><span class="t-v">population</span><span class="t-k">}</span><span class="t-s"> млн"</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span><span class="out-legend"><span class="typed">так</span> выделен ввод с клавиатуры</span></div><pre class="scroll" tabindex="0">Самый большой: Берлин
+Часть названия: <span class="typed">бург</span>
+Гамбург: 1.9 млн</pre></div></figure>
+  <p>Два приёма отсюда пригодятся постоянно. Первый — поиск «рекордной» записи: в накопителе лежит вся запись, а сравнивается одно её поле. Второй — поиск по части текста без учёта больших и маленьких букв: и запрос, и поле переводим в маленькие буквы.</p>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Кортеж — неизменяемый набор значений в круглых скобках.</li>
+    <li>Распаковка: <code>title, artist = song</code>.</li>
+    <li>Набор записей — это список кортежей.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="sec" id="dict" data-toc="Словарь">
+  <header class="sec-head"><span class="sec-num">6</span><div><h2>Словарь</h2><p>Значение по ключу</p></div></header>
+  <p><span class="term">Словарь</span> хранит пары «ключ и значение». Как в гардеробе: номерок — ключ, куртка — значение. По ключу значение находится сразу, без перебора. Ключи не повторяются. Словарь пишут в фигурных скобках, ключ и значение разделяют двоеточием. Тип — <code>dict</code>.</p>
+  <figure class="code"><figcaption><span class="code-name">wardrobe.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">wardrobe</span> = {<span class="t-n">17</span>: <span class="t-s">"куртка Анны"</span>, <span class="t-n">23</span>: <span class="t-s">"пальто Бориса"</span>}</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">wardrobe</span>[<span class="t-n">17</span>])                <span class="t-m"># значение по ключу</span></span>
+<span class="l"><span class="t-v">wardrobe</span>[<span class="t-n">31</span>] = <span class="t-s">"плащ Веры"</span>         <span class="t-m"># ключа не было: добавили</span></span>
+<span class="l"><span class="t-v">wardrobe</span>[<span class="t-n">17</span>] = <span class="t-s">"шуба Анны"</span>         <span class="t-m"># ключ был: заменили</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-f">len</span>(<span class="t-v">wardrobe</span>))</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-n">23</span> <span class="t-k">in</span> <span class="t-v">wardrobe</span>, <span class="t-n">99</span> <span class="t-k">in</span> <span class="t-v">wardrobe</span>)  <span class="t-m"># in проверяет ключи</span></span>
+<span class="l"><span class="t-c">del</span> <span class="t-v">wardrobe</span>[<span class="t-n">23</span>]                   <span class="t-m"># удалить пару</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">wardrobe</span>)</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">куртка Анны
+3
+True False
+{17: 'шуба Анны', 31: 'плащ Веры'}</pre></div></figure>
+  <p>Одна и та же запись <code>wardrobe[ключ] = значение</code> и добавляет новую пару, и заменяет старое значение. Всё зависит от того, есть ли уже такой ключ.</p>
+  <p>Если прочитать значение по ключу, которого нет, программа остановится с ошибкой <code>KeyError</code>.</p>
+  <figure class="code"><figcaption><span class="code-name">missing.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">wardrobe</span> = {<span class="t-n">17</span>: <span class="t-s">"куртка Анны"</span>}</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">wardrobe</span>[<span class="t-n">99</span>])</span></code></pre><div class="out err"><div class="out-label"><span>Ошибка</span></div><pre class="scroll" tabindex="0">Traceback (most recent call last):
+  File "missing.py", line 2, in &lt;module&gt;
+    print(wardrobe[99])
+KeyError: 99</pre></div></figure>
+  <p>Защититься можно двумя способами. Первый — сначала проверить ключ оператором <code>in</code>. Второй — метод <code>get()</code>: он возвращает значение, а если ключа нет — запасной вариант, который указан вторым аргументом.</p>
+  <figure class="code"><figcaption><span class="code-name">safe.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">wardrobe</span> = {<span class="t-n">17</span>: <span class="t-s">"куртка Анны"</span>, <span class="t-n">23</span>: <span class="t-s">"пальто Бориса"</span>}</span>
+<span class="l"><span class="t-v">number</span> = <span class="t-t">int</span>(<span class="t-f">input</span>(<span class="t-s">"Номерок: "</span>))</span>
+<span class="l"><span class="t-c">if</span> <span class="t-v">number</span> <span class="t-k">in</span> <span class="t-v">wardrobe</span>:</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-s">"Выдаю:"</span>, <span class="t-v">wardrobe</span>[<span class="t-v">number</span>])</span>
+<span class="l"><span class="t-c">else</span>:</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-s">"Такого номерка нет"</span>)</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">wardrobe</span>.<span class="t-f">get</span>(<span class="t-v">number</span>, <span class="t-s">"пусто"</span>))</span></code></pre><div class="out"><div class="out-label"><span>Запуск 1</span><span class="out-legend"><span class="typed">так</span> выделен ввод с клавиатуры</span></div><pre class="scroll" tabindex="0">Номерок: <span class="typed">17</span>
+Выдаю: куртка Анны
+куртка Анны</pre></div><div class="out"><div class="out-label"><span>Запуск 2</span></div><pre class="scroll" tabindex="0">Номерок: <span class="typed">99</span>
+Такого номерка нет
+пусто</pre></div></figure>
+
+  <div class="lab" id="w-dict">
+    <div class="lab-head"><b>Тренажёр 3</b><h3>Гардероб: словарь в действии</h3></div>
+    <div class="lab-body">
+      <p>Впиши ключ и значение, нажимай кнопки. Попробуй прочитать и удалить ключ, которого нет.</p>
+      <div class="two-fields">
+        <label class="field">ключ k =<input type="text" id="dc-k" value="31" autocomplete="off" spellcheck="false" maxlength="10"></label>
+        <label class="field">значение v =<input type="text" id="dc-v" value="плащ" autocomplete="off" spellcheck="false" maxlength="14"></label>
+      </div>
+      <div class="op-buttons" id="dc-buttons" role="group" aria-label="Действия со словарём">
+        <button type="button" data-m="set">d[k] = v</button>
+        <button type="button" data-m="read">d[k]</button>
+        <button type="button" data-m="get">d.get(k)</button>
+        <button type="button" data-m="in">k in d</button>
+        <button type="button" data-m="del">del d[k]</button>
+        <button type="button" data-m="len">len(d)</button>
+        <button type="button" data-m="reset">сначала</button>
+      </div>
+      <div class="kv" id="dc-cards" aria-hidden="true"></div>
+      <div class="expr" id="dc-expr" aria-live="polite"></div>
+      <p class="say" id="dc-say"></p>
+    </div>
+  </div>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Словарь — пары «ключ: значение». Ключи уникальны.</li>
+    <li><code>d[k] = v</code> добавляет или заменяет, <code>del d[k]</code> удаляет, <code>k in d</code> проверяет ключ.</li>
+    <li>Чтение по отсутствующему ключу — <code>KeyError</code>. Спасают <code>in</code> и <code>get()</code>.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section class="sec" id="dictloop" data-toc="Перебор и подсчёт">
+  <header class="sec-head"><span class="sec-num">7</span><div><h2>Перебор и подсчёт</h2><p>Ключи, пары и счётчики</p></div></header>
+  <p>Цикл <code>for</code> по словарю идёт по его ключам. Если нужны сразу и ключ, и значение, берут метод <code>items()</code>: он выдаёт пары, и их удобно распаковать прямо в заголовке цикла.</p>
+  <figure class="code"><figcaption><span class="code-name">grades.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">grades</span> = {<span class="t-s">"математика"</span>: <span class="t-n">1.7</span>, <span class="t-s">"физика"</span>: <span class="t-n">2.3</span>, <span class="t-s">"химия"</span>: <span class="t-n">3.0</span>}</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">subject</span> <span class="t-k">in</span> <span class="t-v">grades</span>:                     <span class="t-m"># цикл идёт по ключам</span></span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-v">subject</span>, <span class="t-v">grades</span>[<span class="t-v">subject</span>])</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">subject</span>, <span class="t-v">grade</span> <span class="t-k">in</span> <span class="t-v">grades</span>.<span class="t-f">items</span>():      <span class="t-m"># ключ и значение сразу</span></span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-k">f</span><span class="t-s">"</span><span class="t-k">{</span><span class="t-v">subject</span><span class="t-k">}</span><span class="t-s">: </span><span class="t-k">{</span><span class="t-v">grade</span><span class="t-k">}</span><span class="t-s">"</span>)</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-f">sorted</span>(<span class="t-v">grades</span>))                      <span class="t-m"># ключи по алфавиту</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-f">sum</span>(<span class="t-v">grades</span>.<span class="t-f">values</span>()) / <span class="t-f">len</span>(<span class="t-v">grades</span>))  <span class="t-m"># values(): значения</span></span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">математика 1.7
+физика 2.3
+химия 3.0
+математика: 1.7
+физика: 2.3
+химия: 3.0
+['математика', 'физика', 'химия']
+2.3333333333333335</pre></div></figure>
+
+
+  <h3>Подсчёт: сколько раз встречается каждое значение</h3>
+  <p>Словарь — готовый набор счётчиков. Ключ — то, что считаем. Значение — сколько раз это встретилось. Если ключа ещё нет, заводим его с единицей. Если есть — прибавляем один.</p>
+  <figure class="code"><figcaption><span class="code-name">count_letters.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">text</span> = <span class="t-s">"шалаш"</span></span>
+<span class="l"><span class="t-v">counts</span> = {}                        <span class="t-m"># буква: сколько раз</span></span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">letter</span> <span class="t-k">in</span> <span class="t-v">text</span>:</span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">letter</span> <span class="t-k">in</span> <span class="t-v">counts</span>:</span>
+<span class="l">        <span class="t-v">counts</span>[<span class="t-v">letter</span>] += <span class="t-n">1</span>        <span class="t-m"># буква уже была: плюс один</span></span>
+<span class="l">    <span class="t-c">else</span>:</span>
+<span class="l">        <span class="t-v">counts</span>[<span class="t-v">letter</span>] = <span class="t-n">1</span>         <span class="t-m"># буква встретилась впервые</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">counts</span>)</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">letter</span> <span class="t-k">in</span> <span class="t-f">sorted</span>(<span class="t-v">counts</span>):      <span class="t-m"># ключи по алфавиту</span></span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-v">letter</span>, <span class="t-v">counts</span>[<span class="t-v">letter</span>])</span>
+<span class="l"></span>
+<span class="l"><span class="t-v">best</span> = <span class="t-s">""</span>                          <span class="t-m"># ключ с наибольшим значением</span></span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">letter</span> <span class="t-k">in</span> <span class="t-f">sorted</span>(<span class="t-v">counts</span>):</span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">best</span> == <span class="t-s">""</span> <span class="t-k">or</span> <span class="t-v">counts</span>[<span class="t-v">letter</span>] &gt; <span class="t-v">counts</span>[<span class="t-v">best</span>]:</span>
+<span class="l">        <span class="t-v">best</span> = <span class="t-v">letter</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-s">"Чаще всего:"</span>, <span class="t-v">best</span>, <span class="t-v">counts</span>[<span class="t-v">best</span>])</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">{'ш': 2, 'а': 2, 'л': 1}
+а 2
+л 1
+ш 2
+Чаще всего: а 2</pre></div></figure>
+  <p>То же самое можно записать одной строкой через <code>get()</code>: <code>counts[letter] = counts.get(letter, 0) + 1</code>. Читается так: «возьми старое значение или ноль и прибавь один».</p>
+  <p>Вторая половина программы ищет ключ с самым большим значением. Приём знакомый: в переменной <code>best</code> лежит лучший ключ из уже просмотренных, и каждый новый ключ сравнивается с ним по значению. Буквы «ш» и «а» встречаются по два раза. Ключи перебираются по алфавиту, а знак сравнения строгий — <code>&gt;</code>. Поэтому побеждает «а»: буква «ш» идёт позже и с тем же числом её не вытесняет. Без <code>sorted()</code> победила бы «ш», потому что она встретилась в слове первой.</p>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li><code>for k in d</code> идёт по ключам, <code>for k, v in d.items()</code> — по парам.</li>
+    <li>Подсчёт: ключа нет — записываем 1, ключ есть — прибавляем 1.</li>
+    <li>Самый частый ключ: перебор по <code>sorted()</code> и строгое сравнение — при равенстве побеждает тот, что раньше по алфавиту.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section class="sec" id="nested" data-toc="Словарь записей">
+  <header class="sec-head"><span class="sec-num">8</span><div><h2>Словарь записей</h2><p>База по уникальному номеру</p></div></header>
+  <p>Настоящие данные устроены сложнее одной пары. У фильма есть название, год, несколько жанров и оценки зрителей. Для этого структуры вкладывают друг в друга. Самая частая схема на контрольной: <strong>словарь записей</strong>. Ключ — уникальный номер, значение — словарь с полями записи. Поле само может быть списком или словарём.</p>
+  <figure class="code"><figcaption><span class="code-name">movies.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">movies</span> = {</span>
+<span class="l">    <span class="t-n">101</span>: {<span class="t-s">"title"</span>: <span class="t-s">"Матрица"</span>, <span class="t-s">"year"</span>: <span class="t-n">1999</span>,</span>
+<span class="l">          <span class="t-s">"genres"</span>: [<span class="t-s">"фантастика"</span>, <span class="t-s">"боевик"</span>], <span class="t-s">"votes"</span>: {}},</span>
+<span class="l">    <span class="t-n">102</span>: {<span class="t-s">"title"</span>: <span class="t-s">"Амели"</span>, <span class="t-s">"year"</span>: <span class="t-n">2001</span>,</span>
+<span class="l">          <span class="t-s">"genres"</span>: [<span class="t-s">"комедия"</span>], <span class="t-s">"votes"</span>: {<span class="t-s">"Анна"</span>: <span class="t-n">5</span>}},</span>
+<span class="l">}</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">movies</span>[<span class="t-n">101</span>][<span class="t-s">"title"</span>])                <span class="t-m"># запись, потом поле</span></span>
+<span class="l"><span class="t-v">movies</span>[<span class="t-n">102</span>][<span class="t-s">"genres"</span>].<span class="t-f">append</span>(<span class="t-s">"мелодрама"</span>)  <span class="t-m"># список в записи</span></span>
+<span class="l"><span class="t-v">movies</span>[<span class="t-n">101</span>][<span class="t-s">"votes"</span>][<span class="t-s">"Борис"</span>] = <span class="t-n">4</span>          <span class="t-m"># словарь в записи</span></span>
+<span class="l"><span class="t-v">movies</span>[<span class="t-n">103</span>] = {<span class="t-s">"title"</span>: <span class="t-s">"Начало"</span>, <span class="t-s">"year"</span>: <span class="t-n">2010</span>,</span>
+<span class="l">               <span class="t-s">"genres"</span>: [], <span class="t-s">"votes"</span>: {}}</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">number</span>, <span class="t-v">movie</span> <span class="t-k">in</span> <span class="t-v">movies</span>.<span class="t-f">items</span>():</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-v">number</span>, <span class="t-v">movie</span>[<span class="t-s">"title"</span>], <span class="t-v">movie</span>[<span class="t-s">"genres"</span>])</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">movies</span>[<span class="t-n">101</span>][<span class="t-s">"votes"</span>])</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-k">f</span><span class="t-s">"Фильм: </span><span class="t-k">{</span><span class="t-v">movies</span>[<span class="t-n">101</span>][<span class="t-s">'title'</span>]<span class="t-k">}</span><span class="t-s">"</span>)    <span class="t-m"># другие кавычки</span></span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">Матрица
+101 Матрица ['фантастика', 'боевик']
+102 Амели ['комедия', 'мелодрама']
+103 Начало []
+{'Борис': 4}
+Фильм: Матрица</pre></div></figure>
+  <p>Запись <code>movies[101]["title"]</code> читается слева направо: сначала по номеру достаём запись, потом из записи по названию поля достаём значение. Если поле — список или словарь, его меняют прямо на месте: <code>append()</code> для списка, <code>[ключ] = значение</code> для словаря. Внутри f-строки для ключей берут одинарные кавычки, потому что двойные уже заняты.</p>
+
+  <h3>Справочник и запись</h3>
+  <p>Часто рядом с базой нужен ещё один словарь — справочник. Например, у каждого кружка свои дни занятий. В записи ребёнка хранится только название кружка, а дни берутся из справочника по этому названию.</p>
+  <figure class="code"><figcaption><span class="code-name">clubs.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-v">schedule</span> = {<span class="t-s">"шахматы"</span>: [<span class="t-s">"пн"</span>, <span class="t-s">"ср"</span>], <span class="t-s">"театр"</span>: [<span class="t-s">"вт"</span>, <span class="t-s">"чт"</span>, <span class="t-s">"сб"</span>]}</span>
+<span class="l"><span class="t-v">kids</span> = {</span>
+<span class="l">    <span class="t-n">7</span>: {<span class="t-s">"name"</span>: <span class="t-s">"Оля"</span>, <span class="t-s">"club"</span>: <span class="t-s">"театр"</span>, <span class="t-s">"visits"</span>: {<span class="t-s">"вт"</span>: <span class="t-n">1</span>}},</span>
+<span class="l">    <span class="t-n">8</span>: {<span class="t-s">"name"</span>: <span class="t-s">"Тимур"</span>, <span class="t-s">"club"</span>: <span class="t-s">"шахматы"</span>, <span class="t-s">"visits"</span>: {}},</span>
+<span class="l">}</span>
+<span class="l"><span class="t-v">kid</span> = <span class="t-v">kids</span>[<span class="t-n">7</span>]</span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">kid</span>[<span class="t-s">"name"</span>], <span class="t-v">kid</span>[<span class="t-s">"club"</span>])</span>
+<span class="l"><span class="t-c">for</span> <span class="t-v">day</span> <span class="t-k">in</span> <span class="t-v">schedule</span>[<span class="t-v">kid</span>[<span class="t-s">"club"</span>]]:          <span class="t-m"># дни её кружка</span></span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">day</span> <span class="t-k">in</span> <span class="t-v">kid</span>[<span class="t-s">"visits"</span>]:</span>
+<span class="l">        <span class="t-f">print</span>(<span class="t-v">day</span>, <span class="t-s">"посещений:"</span>, <span class="t-v">kid</span>[<span class="t-s">"visits"</span>][<span class="t-v">day</span>])</span>
+<span class="l">    <span class="t-c">else</span>:</span>
+<span class="l">        <span class="t-f">print</span>(<span class="t-v">day</span>, <span class="t-s">"ещё не была"</span>)</span>
+<span class="l"><span class="t-v">kids</span>[<span class="t-n">8</span>][<span class="t-s">"visits"</span>][<span class="t-s">"ср"</span>] = <span class="t-n">1</span>                <span class="t-m"># отметили посещение</span></span>
+<span class="l"><span class="t-f">print</span>(<span class="t-v">kids</span>[<span class="t-n">8</span>][<span class="t-s">"visits"</span>])</span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span></div><pre class="scroll" tabindex="0">Оля театр
+вт посещений: 1
+чт ещё не была
+сб ещё не была
+{'ср': 1}</pre></div></figure>
+  <p>Запись <code>schedule[kid["club"]]</code> читается изнутри наружу: сначала из записи берём название кружка, потом по нему из справочника — список дней. Цикл идёт по дням кружка, а не по посещениям. Поэтому выводятся и те дни, когда Оля ещё не была.</p>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Словарь записей: номер — ключ, запись — словарь с полями.</li>
+    <li><code>data[номер][поле]</code> читается слева направо.</li>
+    <li>Поле-список и поле-словарь меняют на месте.</li>
+    <li>Справочник берут по значению поля записи: <code>schedule[kid["club"]]</code>.</li>
+  </ul></div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section class="sec" id="library" data-toc="Практикум: библиотека">
+  <header class="sec-head"><span class="sec-num">9</span><div><h2>Практикум: библиотека</h2><p>Собираем всё вместе</p></div></header>
+  <p>Пишем программу в виде задания с контрольной. Задание устроено так же, как вторая контрольная этого курса, только про книги.</p>
+  <ul>
+    <li><strong>a)</strong> Библиотека хранит книги. У книги есть уникальный номер ISBN, название, число свободных экземпляров и жанры — их может быть несколько. Нужно выбрать структуру данных для любого числа книг.</li>
+    <li><strong>b)</strong> Меню: добавить книгу; выдать книгу, если есть свободный экземпляр; показать все книги.</li>
+    <li><strong>c)</strong> Для каждой структуры данных обосновать в комментарии, почему выбрана именно она.</li>
+  </ul>
+  <figure class="code"><figcaption><span class="code-name">Ivanov.py</span><button class="copy" type="button">Копировать</button></figcaption><pre class="scroll" tabindex="0"><code><span class="l"><span class="t-m"># Задание a): книги хранятся в словаре, ключ — ISBN.</span></span>
+<span class="l"><span class="t-v">books</span> = {</span>
+<span class="l">    <span class="t-s">"978-1"</span>: {<span class="t-s">"title"</span>: <span class="t-s">"Основы Python"</span>, <span class="t-s">"copies"</span>: <span class="t-n">2</span>,</span>
+<span class="l">              <span class="t-s">"genres"</span>: [<span class="t-s">"учебник"</span>]},</span>
+<span class="l">}</span>
+<span class="l"></span>
+<span class="l"><span class="t-m"># Задание b): меню.</span></span>
+<span class="l"><span class="t-c">while</span> <span class="t-k">True</span>:</span>
+<span class="l">    <span class="t-f">print</span>(<span class="t-s">"1 - добавить | 2 - выдать | 3 - список | 0 - выход"</span>)</span>
+<span class="l">    <span class="t-v">choice</span> = <span class="t-f">input</span>(<span class="t-s">"Выбор: "</span>).<span class="t-f">strip</span>()</span>
+<span class="l">    <span class="t-c">if</span> <span class="t-v">choice</span> == <span class="t-s">"1"</span>:</span>
+<span class="l">        <span class="t-v">isbn</span> = <span class="t-f">input</span>(<span class="t-s">"ISBN: "</span>).<span class="t-f">strip</span>()</span>
+<span class="l">        <span class="t-c">if</span> <span class="t-v">isbn</span> <span class="t-k">in</span> <span class="t-v">books</span>:</span>
+<span class="l">            <span class="t-f">print</span>(<span class="t-s">"Книга с таким ISBN уже есть"</span>)</span>
+<span class="l">            <span class="t-c">continue</span></span>
+<span class="l">        <span class="t-v">title</span> = <span class="t-f">input</span>(<span class="t-s">"Название: "</span>).<span class="t-f">strip</span>()</span>
+<span class="l">        <span class="t-v">copies</span> = <span class="t-t">int</span>(<span class="t-f">input</span>(<span class="t-s">"Экземпляров: "</span>))</span>
+<span class="l">        <span class="t-v">genres</span> = <span class="t-f">input</span>(<span class="t-s">"Жанры через пробел: "</span>).<span class="t-f">lower</span>().<span class="t-f">split</span>()</span>
+<span class="l">        <span class="t-v">books</span>[<span class="t-v">isbn</span>] = {<span class="t-s">"title"</span>: <span class="t-v">title</span>, <span class="t-s">"copies"</span>: <span class="t-v">copies</span>,</span>
+<span class="l">                       <span class="t-s">"genres"</span>: <span class="t-v">genres</span>}</span>
+<span class="l">    <span class="t-c">elif</span> <span class="t-v">choice</span> == <span class="t-s">"2"</span>:</span>
+<span class="l">        <span class="t-v">isbn</span> = <span class="t-f">input</span>(<span class="t-s">"ISBN: "</span>).<span class="t-f">strip</span>()</span>
+<span class="l">        <span class="t-c">if</span> <span class="t-v">isbn</span> <span class="t-k">not</span> <span class="t-k">in</span> <span class="t-v">books</span>:</span>
+<span class="l">            <span class="t-f">print</span>(<span class="t-s">"Такой книги нет"</span>)</span>
+<span class="l">        <span class="t-c">elif</span> <span class="t-v">books</span>[<span class="t-v">isbn</span>][<span class="t-s">"copies"</span>] == <span class="t-n">0</span>:</span>
+<span class="l">            <span class="t-f">print</span>(<span class="t-s">"Свободных экземпляров нет"</span>)</span>
+<span class="l">        <span class="t-c">else</span>:</span>
+<span class="l">            <span class="t-v">books</span>[<span class="t-v">isbn</span>][<span class="t-s">"copies"</span>] -= <span class="t-n">1</span></span>
+<span class="l">            <span class="t-f">print</span>(<span class="t-s">"Книга выдана"</span>)</span>
+<span class="l">    <span class="t-c">elif</span> <span class="t-v">choice</span> == <span class="t-s">"3"</span>:</span>
+<span class="l">        <span class="t-c">for</span> <span class="t-v">isbn</span>, <span class="t-v">book</span> <span class="t-k">in</span> <span class="t-v">books</span>.<span class="t-f">items</span>():</span>
+<span class="l">            <span class="t-v">free</span> = <span class="t-v">book</span>[<span class="t-s">"copies"</span>]</span>
+<span class="l">            <span class="t-f">print</span>(<span class="t-k">f</span><span class="t-s">"</span><span class="t-k">{</span><span class="t-v">isbn</span><span class="t-k">}</span><span class="t-s">: </span><span class="t-k">{</span><span class="t-v">book</span>[<span class="t-s">'title'</span>]<span class="t-k">}</span><span class="t-s">, свободно </span><span class="t-k">{</span><span class="t-v">free</span><span class="t-k">}</span><span class="t-s">"</span>)</span>
+<span class="l">    <span class="t-c">elif</span> <span class="t-v">choice</span> == <span class="t-s">"0"</span>:</span>
+<span class="l">        <span class="t-c">break</span></span>
+<span class="l">    <span class="t-c">else</span>:</span>
+<span class="l">        <span class="t-f">print</span>(<span class="t-s">"Такого пункта нет"</span>)</span>
+<span class="l"></span>
+<span class="l"><span class="t-m"># Задание c): обоснование.</span></span>
+<span class="l"><span class="t-m"># Все книги — словарь: ISBN уникален, и по нему книга находится</span></span>
+<span class="l"><span class="t-m"># сразу, без перебора. Два раза один ISBN записать нельзя.</span></span>
+<span class="l"><span class="t-m"># Одна книга — словарь: у полей есть понятные названия,</span></span>
+<span class="l"><span class="t-m"># а число экземпляров меняется при выдаче.</span></span>
+<span class="l"><span class="t-m"># Жанры — список: жанров может быть несколько, сколько именно,</span></span>
+<span class="l"><span class="t-m"># заранее неизвестно, а список вмещает любое число значений.</span></span></code></pre><div class="out"><div class="out-label"><span>Что на экране</span><span class="out-legend"><span class="typed">так</span> выделен ввод с клавиатуры</span></div><pre class="scroll" tabindex="0">1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">3</span>
+978-1: Основы Python, свободно 2
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">1</span>
+ISBN: <span class="typed">978-2</span>
+Название: <span class="typed">Сказки</span>
+Экземпляров: <span class="typed">1</span>
+Жанры через пробел: <span class="typed">детям сказки</span>
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">2</span>
+ISBN: <span class="typed">978-2</span>
+Книга выдана
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">2</span>
+ISBN: <span class="typed">978-2</span>
+Свободных экземпляров нет
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">2</span>
+ISBN: <span class="typed">000</span>
+Такой книги нет
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">3</span>
+978-1: Основы Python, свободно 2
+978-2: Сказки, свободно 0
+1 - добавить | 2 - выдать | 3 - список | 0 - выход
+Выбор: <span class="typed">0</span></pre></div></figure>
+  <p>Проследи по выводу: книга «Сказки» одна, поэтому первая выдача проходит, а вторая — уже нет. Номер 000 программа отклоняет, не останавливаясь с ошибкой: ключ проверяется до обращения к словарю.</p>
+  <div class="note kr"><span class="tag">На КР</span>
+    <p>Три вещи, за которые здесь дают баллы. Первая: запись находится по уникальному номеру, и повторный номер отклоняется. Вторая: перед каждым обращением к словарю ключ проверяется. Третья: в пункте c) назван каждый вид структуры — и для набора записей, и для одной записи, и для поля с несколькими значениями.</p>
+  </div>
+
+  <div class="lab" id="w-bugs">
+    <div class="lab-head"><b>Тренажёр 4</b><h3>Охота на баги</h3></div>
+    <div class="lab-body">
+      <p>В каждой программе одна ошибка. Щёлкни по строке, которую нужно исправить.</p>
+      <div class="chipset" id="bug-tabs" role="tablist" aria-label="Программы с ошибками"></div>
+      <div id="bug-cases" style="margin-top:.9rem">
+        <div class="bug-case" data-answer="2" data-near="3">
+          <p class="bug-q">Программа должна вывести наименьшее число.</p>
+<div class="bug-code scroll"><button type="button" class="bug-line" data-n="1"><span class="bug-n">1</span><code><span class="t-v">numbers</span> = [<span class="t-n">5</span>, <span class="t-n">2</span>, <span class="t-n">9</span>]</code></button><button type="button" class="bug-line" data-n="2"><span class="bug-n">2</span><code><span class="t-v">numbers</span> = <span class="t-v">numbers</span>.<span class="t-f">sort</span>()</code></button><button type="button" class="bug-line" data-n="3"><span class="bug-n">3</span><code><span class="t-f">print</span>(<span class="t-v">numbers</span>[<span class="t-n">0</span>])</code></button></div><pre class="bug-msg scroll" hidden>Traceback (most recent call last):
+  File "smallest.py", line 3, in &lt;module&gt;
+    print(numbers[0])
+TypeError: 'NoneType' object is not subscriptable</pre>
+          <p class="say bug-why" hidden>Верно. Python остановился на строке 3, но причина — в строке 2. Метод <code>sort()</code> ничего не возвращает, и в переменную попал <code>None</code>. Нужно просто <code>numbers.sort()</code>.</p>
+        </div>
+        <div class="bug-case" data-answer="2" data-near="3" hidden>
+          <p class="bug-q">Программа должна вывести три напитка.</p>
+<div class="bug-code scroll"><button type="button" class="bug-line" data-n="1"><span class="bug-n">1</span><code><span class="t-v">items</span> = [<span class="t-s">"чай"</span>, <span class="t-s">"сок"</span>, <span class="t-s">"вода"</span>]</code></button><button type="button" class="bug-line" data-n="2"><span class="bug-n">2</span><code><span class="t-c">for</span> <span class="t-v">i</span> <span class="t-k">in</span> <span class="t-f">range</span>(<span class="t-f">len</span>(<span class="t-v">items</span>) + <span class="t-n">1</span>):</code></button><button type="button" class="bug-line" data-n="3"><span class="bug-n">3</span><code>    <span class="t-f">print</span>(<span class="t-v">items</span>[<span class="t-v">i</span>])</code></button></div><pre class="bug-msg scroll" hidden>Traceback (most recent call last):
+  File "drinks.py", line 3, in &lt;module&gt;
+    print(items[i])
+IndexError: list index out of range</pre>
+          <p class="say bug-why" hidden>Верно. В списке три элемента с индексами 0, 1 и 2. Из-за лишнего <code>+ 1</code> цикл доходит до индекса 3, которого нет. Нужно <code>range(len(items))</code>.</p>
+        </div>
+        <div class="bug-case" data-answer="2" hidden>
+          <p class="bug-q">Программа должна исправить название песни.</p>
+<div class="bug-code scroll"><button type="button" class="bug-line" data-n="1"><span class="bug-n">1</span><code><span class="t-v">record</span> = (<span class="t-s">"Numb"</span>, <span class="t-s">"Linkin Park"</span>)</code></button><button type="button" class="bug-line" data-n="2"><span class="bug-n">2</span><code><span class="t-v">record</span>[<span class="t-n">0</span>] = <span class="t-s">"Faded"</span></code></button><button type="button" class="bug-line" data-n="3"><span class="bug-n">3</span><code><span class="t-f">print</span>(<span class="t-v">record</span>)</code></button></div><pre class="bug-msg scroll" hidden>Traceback (most recent call last):
+  File "record.py", line 2, in &lt;module&gt;
+    record[0] = "Faded"
+TypeError: 'tuple' object does not support item assignment</pre>
+          <p class="say bug-why" hidden>Верно. Кортеж нельзя изменить. Нужно создать новый кортеж: <code>record = ("Faded", record[1])</code>.</p>
+        </div>
+        <div class="bug-case" data-answer="2" hidden>
+          <p class="bug-q">Программа должна вывести цену или сообщить, что товара нет.</p>
+<div class="bug-code scroll"><button type="button" class="bug-line" data-n="1"><span class="bug-n">1</span><code><span class="t-v">prices</span> = {<span class="t-s">"хлеб"</span>: <span class="t-n">1.2</span>, <span class="t-s">"сыр"</span>: <span class="t-n">3.5</span>}</code></button><button type="button" class="bug-line" data-n="2"><span class="bug-n">2</span><code><span class="t-f">print</span>(<span class="t-v">prices</span>[<span class="t-s">"кофе"</span>])</code></button><button type="button" class="bug-line" data-n="3"><span class="bug-n">3</span><code><span class="t-f">print</span>(<span class="t-s">"Готово"</span>)</code></button></div><pre class="bug-msg scroll" hidden>Traceback (most recent call last):
+  File "price.py", line 2, in &lt;module&gt;
+    print(prices["кофе"])
+KeyError: 'кофе'</pre>
+          <p class="say bug-why" hidden>Верно. Ключа «кофе» в словаре нет, и чтение по нему даёт <code>KeyError</code>. Нужно сначала проверить <code>if "кофе" in prices</code> или взять <code>prices.get("кофе", "нет такого товара")</code>.</p>
+        </div>
+        <div class="bug-case" data-answer="3" hidden>
+          <p class="bug-q">Программа должна посчитать, сколько раз встречается каждое слово.</p>
+<div class="bug-code scroll"><button type="button" class="bug-line" data-n="1"><span class="bug-n">1</span><code><span class="t-v">counts</span> = {}</code></button><button type="button" class="bug-line" data-n="2"><span class="bug-n">2</span><code><span class="t-c">for</span> <span class="t-v">word</span> <span class="t-k">in</span> <span class="t-s">"да нет да"</span>.<span class="t-f">split</span>():</code></button><button type="button" class="bug-line" data-n="3"><span class="bug-n">3</span><code>    <span class="t-v">counts</span>[<span class="t-v">word</span>] += <span class="t-n">1</span></code></button><button type="button" class="bug-line" data-n="4"><span class="bug-n">4</span><code><span class="t-f">print</span>(<span class="t-v">counts</span>)</code></button></div><pre class="bug-msg scroll" hidden>Traceback (most recent call last):
+  File "words.py", line 3, in &lt;module&gt;
+    counts[word] += 1
+KeyError: 'да'</pre>
+          <p class="say bug-why" hidden>Верно. Когда слово встречается впервые, ключа в словаре ещё нет, и <code>counts[word] += 1</code> даёт <code>KeyError</code>. Нужна проверка: ключа нет — записать 1, ключ есть — прибавить 1. Или одной строкой: <code>counts[word] = counts.get(word, 0) + 1</code>.</p>
+        </div>
+      </div>
+      <p class="say" id="bug-say" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="recap"><h3>Итог раздела</h3><ul>
+    <li>Набор записей — словарь по уникальному номеру, запись — словарь полей.</li>
+    <li>Перед обращением по ключу проверяем <code>in</code> или <code>not in</code>.</li>
+    <li>Каждую выбранную структуру объясняем в комментарии.</li>
+  </ul></div>
+</section>
+
+<!-- ============ ИТОГИ ============ -->
+<section class="sec" id="summary" data-toc="Итоги лекции">
+  <header class="sec-head"><span class="sec-num">Σ</span><div><h2>Итоги лекции</h2><p>Пять фактов и пять терминов</p></div></header>
+  <div class="sum-grid">
+    <div class="tile c"><h3>5 главных фактов</h3>
+      <ol>
+        <li>Список хранит много значений по порядку и может меняться. Методы меняют сам список, <code>sort()</code> возвращает <code>None</code>.</li>
+        <li><code>split()</code> режет строку на список строк. Числа получают через <code>int()</code> для каждой части.</li>
+        <li>Кортеж — неизменяемая запись. Набор записей — список кортежей.</li>
+        <li>Словарь находит значение по ключу сразу. Перед чтением ключ проверяют через <code>in</code> или берут <code>get()</code>.</li>
+        <li>База записей — словарь по уникальному номеру, запись — словарь полей: <code>data[номер][поле]</code>.</li>
+      </ol>
+    </div>
+    <div class="tile b"><h3>5 ключевых терминов</h3>
+      <dl>
+        <dt>Список</dt><dd>Изменяемый набор значений по порядку, тип <code>list</code>.</dd>
+        <dt>Кортеж</dt><dd>Неизменяемый набор значений, тип <code>tuple</code>.</dd>
+        <dt>Распаковка</dt><dd>Запись значений кортежа в отдельные переменные.</dd>
+        <dt>Словарь</dt><dd>Пары «ключ: значение», тип <code>dict</code>.</dd>
+        <dt>Ключ</dt><dd>То, по чему в словаре находят значение. Ключи не повторяются.</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="tbl-wrap scroll" tabindex="0"><table>
+    <thead><tr><th>Хочу</th><th>Пишу</th></tr></thead>
+    <tbody>
+      <tr><td>Добавить в конец списка</td><td><code class="py"><span class="t-v">items</span>.<span class="t-f">append</span>(<span class="t-v">x</span>)</code></td></tr>
+      <tr><td>Удалить по значению</td><td><code class="py"><span class="t-v">items</span>.<span class="t-f">remove</span>(<span class="t-v">x</span>)</code></td></tr>
+      <tr><td>Удалить по индексу и получить элемент</td><td><code class="py"><span class="t-v">x</span> = <span class="t-v">items</span>.<span class="t-f">pop</span>(<span class="t-v">i</span>)</code></td></tr>
+      <tr><td>Отсортировать сам список</td><td><code class="py"><span class="t-v">items</span>.<span class="t-f">sort</span>()</code></td></tr>
+      <tr><td>Пройти с номерами</td><td><code class="py"><span class="t-c">for</span> <span class="t-v">number</span>, <span class="t-v">x</span> <span class="t-k">in</span> <span class="t-f">enumerate</span>(<span class="t-v">items</span>, <span class="t-n">1</span>):</code></td></tr>
+      <tr><td>Слова из строки</td><td><code class="py"><span class="t-v">words</span> = <span class="t-v">text</span>.<span class="t-f">lower</span>().<span class="t-f">split</span>()</code></td></tr>
+      <tr><td>Добавить запись-кортеж</td><td><code class="py"><span class="t-v">records</span>.<span class="t-f">append</span>((<span class="t-v">name</span>, <span class="t-v">points</span>))</code></td></tr>
+      <tr><td>Добавить или заменить по ключу</td><td><code class="py"><span class="t-v">d</span>[<span class="t-v">k</span>] = <span class="t-v">v</span></code></td></tr>
+      <tr><td>Прочитать без ошибки</td><td><code class="py"><span class="t-c">if</span> <span class="t-v">k</span> <span class="t-k">in</span> <span class="t-v">d</span>:</code> или <code class="py"><span class="t-v">d</span>.<span class="t-f">get</span>(<span class="t-v">k</span>, <span class="t-s">"нет"</span>)</code></td></tr>
+      <tr><td>Пройти по парам</td><td><code class="py"><span class="t-c">for</span> <span class="t-v">k</span>, <span class="t-v">v</span> <span class="t-k">in</span> <span class="t-v">d</span>.<span class="t-f">items</span>():</code></td></tr>
+      <tr><td>Посчитать повторы</td><td><code class="py"><span class="t-v">counts</span>[<span class="t-v">w</span>] = <span class="t-v">counts</span>.<span class="t-f">get</span>(<span class="t-v">w</span>, <span class="t-n">0</span>) + <span class="t-n">1</span></code></td></tr>
+      <tr><td>Поле записи</td><td><code class="py"><span class="t-v">data</span>[<span class="t-v">number</span>][<span class="t-s">"name"</span>]</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ ПРОВЕРЬ СЕБЯ ============ -->
+<section class="sec" id="quiz" data-toc="Проверь себя">
+  <header class="sec-head"><span class="sec-num">?</span><div><h2>Проверь себя</h2><p>Восемь вопросов</p></div></header>
+  <p>Сначала ответь сам — вслух или на бумаге. Потом открой ответ и честно отметь результат.</p>
+  <div class="quiz">
+    <div class="quiz-bar"><span class="quiz-score" aria-live="polite"></span><button class="btn ghost quiz-toggle" type="button">Открыть все ответы</button></div>
+
+    <details class="q"><summary><span>Что вернёт <code>items.sort()</code>? Что окажется в переменной после <code>items = items.sort()</code>?</span></summary>
+      <div class="a"><p>Метод <code>sort()</code> сортирует сам список и возвращает <code>None</code>. После записи <code>items = items.sort()</code> в переменной лежит <code>None</code>, а список потерян.</p></div></details>
+
+    <details class="q"><summary><span>Чем <code>remove()</code> отличается от <code>pop()</code>?</span></summary>
+      <div class="a"><p><code>remove(x)</code> удаляет элемент по значению и ничего не возвращает; если значения нет, будет <code>ValueError</code>. <code>pop(i)</code> удаляет элемент по индексу и возвращает его; без аргумента удаляет последний.</p></div></details>
+
+    <details class="q"><summary><span>Что выдаст <code>"12 7 30".split()</code>? Можно ли сразу посчитать сумму через <code>sum()</code>?</span></summary>
+      <div class="a"><p>Получится список строк <code>['12', '7', '30']</code>. Сумму посчитать нельзя: будет <code>TypeError</code>, потому что это строки. Сначала каждую часть превращают через <code>int()</code>.</p></div></details>
+
+    <details class="q"><summary><span>Почему одного игрока удобно хранить кортежем, а всех игроков — списком?</span></summary>
+      <div class="a"><p>Игрок — запись: имя и очки после ввода не меняются, и кортеж не даёт изменить их случайно. Набор игроков растёт по мере ввода — для этого нужен список.</p></div></details>
+
+    <details class="q"><summary><span>Что случится при чтении <code>prices["кофе"]</code>, если такого ключа нет? Как защититься?</span></summary>
+      <div class="a"><p>Программа остановится с ошибкой <code>KeyError</code>. Защититься можно проверкой <code>if "кофе" in prices</code> перед чтением или методом <code>get()</code>: <code>prices.get("кофе", 0)</code> вернёт запасное значение.</p></div></details>
+
+    <details class="q"><summary><span>Как посчитать, сколько раз встречается каждое слово? Что делать, когда слово встретилось впервые?</span></summary>
+      <div class="a"><p>Завести пустой словарь: ключ — слово, значение — сколько раз. Если слова ещё нет среди ключей, записать 1, иначе прибавить 1. Короче: <code>counts[word] = counts.get(word, 0) + 1</code>.</p></div></details>
+
+    <details class="q"><summary><span>Как прочитать название фильма с номером 101 из словаря <code>movies</code>? Как вывести его внутри f-строки?</span></summary>
+      <div class="a"><p><code>movies[101]["title"]</code>: сначала запись по номеру, потом поле по названию. В f-строке в двойных кавычках ключ пишут в одинарных: <code>f"Фильм: {movies[101]['title']}"</code>.</p></div></details>
+
+    <details class="q"><summary><span>В базе книг три структуры. Какие и почему каждая выбрана?</span></summary>
+      <div class="a"><p>Все книги — словарь по ISBN: номер уникален, книга находится сразу, повтор номера невозможен. Одна книга — словарь полей: у полей понятные названия, число экземпляров меняется. Жанры — список: жанров может быть несколько, и их число заранее неизвестно.</p></div></details>
+  </div>
+
+  <div class="foot">
+    <h2>Что дальше</h2>
+    <p>Лабораторная 4–5: четыре задачи на занятии и одна дома. Следующая тема — «Функции»: разбиваем программу на части, и каждая часть работает со списками и словарями.</p>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+/* Общие механики лекции: тема, прогресс чтения, оглавление, копирование кода, «Проверь себя». */
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+
+  /* --- три темы: светлая, тёмная, системная --- */
+  var KEY = 'py-course-theme';
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  var choice = 'system';
+  try { choice = localStorage.getItem(KEY) || 'system'; } catch (e) { /* хранилище недоступно */ }
+  function applyTheme() {
+    var eff = choice === 'system' ? (mq && mq.matches ? 'dark' : 'light') : choice;
+    root.setAttribute('data-theme', eff);
+    $$('.themes button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === choice));
+    });
+  }
+  $$('.themes button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      choice = b.getAttribute('data-set');
+      try { localStorage.setItem(KEY, choice); } catch (e) { /* не страшно */ }
+      applyTheme();
+    });
+  });
+  if (mq) {
+    var onMq = function () { if (choice === 'system') applyTheme(); };
+    if (mq.addEventListener) mq.addEventListener('change', onMq); else if (mq.addListener) mq.addListener(onMq);
+  }
+  applyTheme();
+
+  /* --- прогресс чтения и подсветка раздела в оглавлении --- */
+  var bar = $('.progress i');
+  var toc = $('#toc');
+  var links = $$('#toc a');
+  var secs = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  var ticking = false;
+  function onScroll() {
+    ticking = false;
+    var max = root.scrollHeight - window.innerHeight;
+    var y = window.pageYOffset || root.scrollTop || 0;
+    if (bar) bar.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+    var cur = -1;
+    for (var i = 0; i < secs.length; i++) {
+      if (secs[i] && secs[i].getBoundingClientRect().top <= 140) cur = i;
+    }
+    if (max > 0 && y >= max - 2) cur = secs.length - 1;
+    links.forEach(function (a, i) {
+      a.classList.toggle('active', i === cur);
+      a.classList.toggle('done', i < cur);
+      if (i === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+    if (cur >= 0 && toc && toc.scrollHeight > toc.clientHeight && !toc.classList.contains('open')) {
+      var a = links[cur];
+      var top = a.offsetTop - toc.clientHeight / 2 + a.offsetHeight / 2;
+      toc.scrollTop = Math.max(0, top);
+    }
+  }
+  function requestTick() { if (!ticking) { ticking = true; (window.requestAnimationFrame || setTimeout)(onScroll); } }
+  window.addEventListener('scroll', requestTick, { passive: true });
+  window.addEventListener('resize', requestTick);
+  onScroll();
+
+  /* --- оглавление на телефоне --- */
+  var tocBtn = $('.toc-btn');
+  function closeToc() { if (toc) toc.classList.remove('open'); if (tocBtn) tocBtn.setAttribute('aria-expanded', 'false'); }
+  if (tocBtn && toc) {
+    tocBtn.addEventListener('click', function () {
+      var open = toc.classList.toggle('open');
+      tocBtn.setAttribute('aria-expanded', String(open));
+    });
+    links.forEach(function (a) { a.addEventListener('click', closeToc); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeToc(); });
+    document.addEventListener('click', function (e) {
+      if (toc.classList.contains('open') && !toc.contains(e.target) && !tocBtn.contains(e.target)) closeToc();
+    });
+  }
+
+  /* --- кнопка «Копировать» на каждом блоке кода --- */
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () { return legacyCopy(text); });
+    }
+    return legacyCopy(text);
+  }
+  function legacyCopy(text) {
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) resolve(); else reject(new Error('copy'));
+    });
+  }
+  $$('.code .copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var code = $('pre code', btn.closest('.code'));
+      var text = $$('.l', code).map(function (l) { return l.textContent; }).join('\n');
+      copyText(text).then(function () { flash(btn, 'Скопировано', 'ok'); }, function () { flash(btn, 'Не вышло', ''); });
+    });
+  });
+  function flash(btn, label, cls) {
+    var old = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', old);
+    btn.textContent = label;
+    if (cls) btn.classList.add(cls);
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function () { btn.textContent = old; btn.classList.remove('ok'); }, 1600);
+  }
+
+  /* --- «Проверь себя»: раскрытие ответов и самооценка --- */
+  var quiz = $('.quiz');
+  if (quiz) {
+    var qs = $$('.q', quiz);
+    var score = $('.quiz-score');
+    var toggleAll = $('.quiz-toggle');
+    function updateScore() {
+      var yes = qs.filter(function (q) { return q.getAttribute('data-mark') === 'yes'; }).length;
+      var marked = qs.filter(function (q) { return q.hasAttribute('data-mark'); }).length;
+      if (score) score.textContent = marked ? 'Знал ответ: ' + yes + ' из ' + qs.length : 'Вопросов: ' + qs.length + '. Сначала ответь сам, потом открой ответ.';
+    }
+    qs.forEach(function (q) {
+      var box = document.createElement('div');
+      box.className = 'mark';
+      [['yes', 'Я ответил верно'], ['no', 'Надо повторить']].forEach(function (pair) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'btn ghost'; b.textContent = pair[1];
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () {
+          q.setAttribute('data-mark', pair[0]);
+          $$('.btn', box).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          updateScore();
+        });
+        box.appendChild(b);
+      });
+      $('.a', q).appendChild(box);
+    });
+    if (toggleAll) {
+      toggleAll.addEventListener('click', function () {
+        var open = qs.some(function (q) { return !q.open; });
+        qs.forEach(function (q) { q.open = open; });
+        toggleAll.textContent = open ? 'Скрыть все ответы' : 'Открыть все ответы';
+      });
+    }
+    updateScore();
+  }
+})();
+
+/* Общие помощники тренажёров: значения «как в Python» и «Охота на баги». */
+(function () {
+  'use strict';
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  /* --- как Python показывает значения --- */
+  function pyRepr(s) {
+    var body = s.replace(/\\/g, '\\\\');
+    if (s.indexOf("'") >= 0 && s.indexOf('"') < 0) return '"' + body + '"';
+    return "'" + body.replace(/'/g, "\\'") + "'";
+  }
+  function pyFloat(x) {
+    if (isNaN(x)) return 'nan';
+    if (!isFinite(x)) return x < 0 ? '-inf' : 'inf';
+    if (Object.is(x, -0)) return '-0.0';
+    var a = Math.abs(x);
+    if (a !== 0 && (a >= 1e16 || a < 1e-4)) {
+      return x.toExponential().replace(/e([+-])(\d)$/, 'e$10$2');
+    }
+    return Number.isInteger(x) ? x.toFixed(0) + '.0' : String(x);
+  }
+  function pyFixed(x, d) {               /* как f"{x:.df}": округление «к чётному» при точной половине */
+    var neg = x < 0 || Object.is(x, -0);
+    var s = Math.abs(x).toFixed(Math.min(100, d + 30));
+    var dot = s.indexOf('.');
+    var keep = s.slice(0, dot) + s.slice(dot + 1, dot + 1 + d);
+    var tail = s.slice(dot + 1 + d);
+    var n = BigInt(keep);
+    var c = tail.charAt(0);
+    if (c > '5' || (c === '5' && (/[1-9]/.test(tail.slice(1)) || n % 2n === 1n))) n += 1n;
+    var t = n.toString();
+    while (t.length <= d) t = '0' + t;
+    return (neg ? '-' : '') + (d ? t.slice(0, t.length - d) + '.' + t.slice(t.length - d) : t);
+  }
+  function pyPad(n, width) {             /* как f"{n:0Wd}" */
+    var neg = n < 0n;
+    var digits = (neg ? -n : n).toString();
+    while (digits.length + (neg ? 1 : 0) < width) digits = '0' + digits;
+    return (neg ? '-' : '') + digits;
+  }
+  var RE_INT = /^[+-]?\d+(?:_\d+)*$/;
+  var RE_FLOAT = /^[+-]?(?:\d+(?:_\d+)*\.?(?:\d+(?:_\d+)*)?|\.\d+(?:_\d+)*)(?:[eE][+-]?\d+(?:_\d+)*)?$/;
+  var RE_SPECIAL = /^[+-]?(?:inf|infinity|nan)$/i;
+  function parseInt_(text) {
+    var t = text.trim();
+    return RE_INT.test(t) ? BigInt(t.replace(/_/g, '')) : null;
+  }
+  function parseFloat_(text) {
+    var t = text.trim();
+    if (RE_FLOAT.test(t)) return parseFloat(t.replace(/_/g, ''));
+    if (RE_SPECIAL.test(t)) { var low = t.toLowerCase(); return low.indexOf('nan') >= 0 ? NaN : (low.charAt(0) === '-' ? -Infinity : Infinity); }
+    return null;
+  }
+  window.PyKit = { $: $, $$: $$, el: el, pyRepr: pyRepr, pyFloat: pyFloat, pyFixed: pyFixed, pyPad: pyPad,
+    parseInt_: parseInt_, parseFloat_: parseFloat_, RE_INT: RE_INT, RE_FLOAT: RE_FLOAT };
+
+  /* --- «Охота на баги»: работает в любой лекции, где есть #bug-tabs и .bug-case --- */
+  (function () {
+    var tabs = $('#bug-tabs'); if (!tabs) return;
+    var cases = $$('.bug-case'), say = $('#bug-say'), solved = cases.map(function () { return false; });
+    function show(k) {
+      cases.forEach(function (c, j) { c.hidden = j !== k; });
+      $$('button', tabs).forEach(function (b, j) { b.setAttribute('aria-selected', String(j === k)); });
+      status();
+    }
+    function status() {
+      var n = solved.filter(Boolean).length;
+      say.textContent = n === cases.length ? 'Все баги пойманы. Так же ищи ошибки в своих программах: тип ошибки, номер строки, строка выше.'
+        : 'Поймано багов: ' + n + ' из ' + cases.length + '.';
+      $$('button', tabs).forEach(function (b, j) { b.textContent = 'Баг ' + (j + 1) + (solved[j] ? ' ✓' : ''); });
+    }
+    cases.forEach(function (c, k) {
+      var tab = el('button', '', 'Баг ' + (k + 1));
+      tab.type = 'button'; tab.setAttribute('role', 'tab');
+      tab.addEventListener('click', function () { show(k); });
+      tabs.appendChild(tab);
+      var answer = c.getAttribute('data-answer'), near = c.getAttribute('data-near');
+      var msg = $('.bug-msg', c), why = $('.bug-why', c);
+      var hint = el('p', 'say'); hint.hidden = true; hint.setAttribute('aria-live', 'polite');
+      c.appendChild(hint);
+      $$('.bug-line', c).forEach(function (line) {
+        line.addEventListener('click', function () {
+          var n = line.getAttribute('data-n');
+          $$('.bug-line', c).forEach(function (l) { l.classList.remove('miss'); });
+          if (n === answer) {
+            line.classList.add('hit'); msg.hidden = false; why.hidden = false; hint.hidden = true;
+            solved[k] = true; status();
+          } else if (!solved[k]) {
+            line.classList.add('miss'); hint.hidden = false;
+            hint.textContent = n === near
+              ? 'Почти. Именно на этой строке Python остановится. Но чинить нужно не её: причина появилась раньше. Откуда взялось значение?'
+              : 'Нет, эта строка в порядке. Прочитай программу сверху вниз, как это делает Python.';
+          }
+        });
+      });
+    });
+    show(0);
+  })();
+})();
+
+/* Длинный код внутри текста может переноситься, короткий — нет (иначе на телефоне он вылезает за край). */
+(function () {
+  'use strict';
+  var list = document.querySelectorAll('main p code, main li code, main summary code, main dd code, .note code');
+  Array.prototype.forEach.call(list, function (c) {
+    if (c.closest('pre, .steplist, .bug-line, .expr, .lab table') === null && c.textContent.length > 22) c.classList.add('wrap');
+  });
+})();
+
+</script>
+<script>
+/* ===== Тренажёры блока 4–5: из лекции 4 ===== */
+(function () {
+  'use strict';
+  var K = window.PyKit, $ = K.$, $$ = K.$$, el = K.el, pyRepr = K.pyRepr, pyFloat = K.pyFloat;
+  function listRepr(items) { return '[' + items.map(function (x) { return typeof x === 'number' ? String(x) : pyRepr(x); }).join(', ') + ']'; }
+  function drawCells(box, items, marks) {
+    box.textContent = '';
+    items.forEach(function (x, k) {
+      var c = el('div', 'cellx' + (marks && marks[k] ? ' ' + marks[k] : ''));
+      c.appendChild(el('small', '', String(k)));
+      c.appendChild(el('b', '', String(x)));
+      box.appendChild(c);
+    });
+    if (!items.length) box.appendChild(el('span', 'nm-empty', 'Список пуст: []'));
+  }
+
+  /* --- Тренажёр 1: методы списка (поведение как в Python) --- */
+  var ListOps = {
+    insert: function (list, i, x) { var at = i < 0 ? Math.max(0, list.length + i) : Math.min(i, list.length); list.splice(at, 0, x); },
+    popIndex: function (len, i) { if (!len) return 'IndexError: pop from empty list'; if (i < -len || i >= len) return 'IndexError: pop index out of range'; return i < 0 ? i + len : i; }
+  };
+  window.__listOps = ListOps;
+  (function () {
+    var X = $('#pl-x'); if (!X) return;
+    var I = $('#pl-i'), cells = $('#pl-cells'), expr = $('#pl-expr'), say = $('#pl-say');
+    var START = ['Numb', 'Believer', 'Faded'], list = START.slice();
+    function show(code, text, cls) {
+      expr.textContent = '';
+      expr.appendChild(document.createTextNode(code + '\nвернул:  '));
+      expr.appendChild(el('span', cls, text));
+      expr.appendChild(document.createTextNode('\nplaylist = '));
+      expr.appendChild(el('span', 'str', listRepr(list)));
+    }
+    function act(m) {
+      var x = X.value, it = I.value.trim(), i = /^[+-]?\d+$/.test(it) ? parseInt(it, 10) : null, r = pyRepr(x), pos;
+      if ((m === 'append' || m === 'insert') && list.length >= 8) { say.textContent = 'В тренажёре помещается восемь песен. Удали что-нибудь или нажми «сначала».'; return; }
+      if ((m === 'insert' || m === 'popi') && i === null) { say.textContent = 'Индекс — целое число. Впиши его в поле «индекс i».'; return; }
+      if (m === 'reset') { list = START.slice(); show('playlist = ' + listRepr(list), 'None', 'res'); say.textContent = 'Список снова такой, каким был в начале.'; }
+      else if (m === 'append') { list.push(x); show('playlist.append(' + r + ')', 'None', 'res'); say.textContent = 'Элемент добавлен в конец. Сам метод ничего не вернул.'; }
+      else if (m === 'insert') { ListOps.insert(list, i, x); show('playlist.insert(' + i + ', ' + r + ')', 'None', 'res'); say.textContent = 'Элемент встал на место с индексом ' + i + ', остальные сдвинулись вправо.' + (i > list.length - 1 ? ' Индекс больше длины списка — элемент просто добавлен в конец.' : ''); }
+      else if (m === 'remove') {
+        pos = list.indexOf(x);
+        if (pos < 0) { show('playlist.remove(' + r + ')', 'ValueError: list.remove(x): x not in list', 'bad'); say.textContent = 'Такого элемента нет, и программа остановилась бы с ошибкой. Поэтому сначала проверяют: if x in playlist.'; }
+        else { list.splice(pos, 1); show('playlist.remove(' + r + ')', 'None', 'res'); say.textContent = 'Удалён первый элемент, равный ' + r + '. Метод ничего не вернул.'; }
+      }
+      else if (m === 'pop' || m === 'popi') {
+        pos = ListOps.popIndex(list.length, m === 'pop' ? -1 : i);
+        var code = m === 'pop' ? 'playlist.pop()' : 'playlist.pop(' + i + ')';
+        if (typeof pos === 'string') { show(code, pos, 'bad'); say.textContent = list.length ? 'Элемента с таким индексом нет.' : 'Список пуст: удалять нечего.'; }
+        else { var gone = list.splice(pos, 1)[0]; show(code, pyRepr(gone), 'str'); say.textContent = 'Элемент удалён, и метод вернул его. Его можно сохранить: last = playlist.pop().'; }
+      }
+      else if (m === 'index') {
+        pos = list.indexOf(x);
+        if (pos < 0) { show('playlist.index(' + r + ')', 'ValueError: ' + r + ' is not in list', 'bad'); say.textContent = 'Такого элемента нет: ошибка. Сначала проверяют оператором in.'; }
+        else { show('playlist.index(' + r + ')', String(pos), 'res'); say.textContent = 'Метод вернул индекс первого найденного элемента. Список не изменился.'; }
+      }
+      else if (m === 'count') { show('playlist.count(' + r + ')', String(list.filter(function (v) { return v === x; }).length), 'res'); say.textContent = 'Метод посчитал, сколько раз элемент встречается. Список не изменился.'; }
+      else if (m === 'sort') { list.sort(); show('playlist.sort()', 'None', 'res'); say.textContent = 'Список отсортирован на месте. Метод вернул None, поэтому писать playlist = playlist.sort() нельзя. Большие буквы идут раньше маленьких.'; }
+      else if (m === 'reverse') { list.reverse(); show('playlist.reverse()', 'None', 'res'); say.textContent = 'Список перевёрнут на месте. Метод ничего не вернул.'; }
+      else if (m === 'clear') { list = []; show('playlist.clear()', 'None', 'res'); say.textContent = 'Все элементы удалены. Остался пустой список.'; }
+      drawCells(cells, list);
+    }
+    $$('#pl-buttons button').forEach(function (b) { b.addEventListener('click', function () { act(b.getAttribute('data-m')); }); });
+    act('reset');
+    say.textContent = 'В плейлисте три песни. Над каждой — её индекс.';
+  })();
+
+  /* --- Тренажёр 2: статистика списка --- */
+  (function () {
+    var T = $('#st-text'); if (!T) return;
+    var cells = $('#st-cells'), rows = $('#st-rows'), say = $('#st-say'), presets = $$('#st-presets button');
+    function row(code, value, bad) {
+      var tr = el('tr');
+      var c1 = el('td'); c1.appendChild(el('code', '', code)); tr.appendChild(c1);
+      var c2 = el('td', bad ? 'bad' : ''); c2.appendChild(el('span', 'v', value)); tr.appendChild(c2);
+      rows.appendChild(tr);
+    }
+    function draw() {
+      var parts = T.value.split(/\s+/).filter(function (p) { return p !== ''; }), nums = [], bad = null;
+      rows.textContent = ''; cells.textContent = '';
+      presets.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === T.value)); });
+      row('text.split()', listRepr(parts));
+      parts.forEach(function (p) { if (bad === null) { if (/^[+-]?\d{1,6}$/.test(p)) nums.push(parseInt(p, 10)); else bad = p; } });
+      if (bad !== null) {
+        row('int(part)', "ValueError: invalid literal for int() with base 10: " + pyRepr(bad), true);
+        say.textContent = 'Часть ' + pyRepr(bad) + ' не превращается в целое число. Программа остановилась бы на ней.';
+        return;
+      }
+      if (!nums.length) { say.textContent = 'Строка пустая: split() вернул пустой список. Среднее посчитать нельзя — делить не на что.'; return; }
+      var ordered = nums.slice().sort(function (a, b) { return a - b; }), n = ordered.length, mid = Math.floor(n / 2), sum = 0, marks = {}, median;
+      nums.forEach(function (v) { sum += v; });
+      row('numbers', listRepr(nums));
+      row('len(numbers)', String(n));
+      row('min(numbers), max(numbers)', '(' + ordered[0] + ', ' + ordered[n - 1] + ')');
+      row('sum(numbers)', String(sum));
+      row('sum(numbers) / len(numbers)', pyFloat(sum / n));
+      row('sorted(numbers)', listRepr(ordered));
+      if (n % 2 === 1) { marks[mid] = 'on'; median = String(ordered[mid]); row('ordered[' + mid + ']', median); }
+      else { marks[mid - 1] = 'on'; marks[mid] = 'on'; median = pyFloat((ordered[mid - 1] + ordered[mid]) / 2); row('(ordered[' + (mid - 1) + '] + ordered[' + mid + ']) / 2', median); }
+      drawCells(cells, ordered, marks);
+      say.textContent = 'В ячейках — отсортированный список. Чисел ' + n + ': ' + (n % 2 === 1 ? 'количество нечётное, середина одна — элемент с индексом ' + mid : 'количество чётное, середины две — индексы ' + (mid - 1) + ' и ' + mid + ', берём их среднее') + '. Медиана: ' + median + '.';
+    }
+    presets.forEach(function (b) { b.addEventListener('click', function () { T.value = b.getAttribute('data-v'); draw(); }); });
+    T.addEventListener('input', draw);
+    draw();
+  })();
+})();
+</script>
+<script>
+/* ===== Тренажёры блока 4–5: из лекции 5 ===== */
+(function () {
+  'use strict';
+  var K = window.PyKit, $ = K.$, $$ = K.$$, el = K.el, pyRepr = K.pyRepr;
+  function pyBool(v) { return v ? 'True' : 'False'; }
+  function byCode(a, b) { return a < b ? -1 : (a > b ? 1 : 0); }        /* порядок как у sorted() в Python */
+  function listRepr(items) { return '[' + items.map(function (x) { return pyRepr(x); }).join(', ') + ']'; }
+  function uniq(text) {
+    var out = [];
+    text.split(/\s+/).forEach(function (w) { if (w !== '' && out.indexOf(w) < 0) out.push(w); });
+    return out;
+  }
+  window.__setOps = {
+    and: function (a, b) { return a.filter(function (x) { return b.indexOf(x) >= 0; }).sort(byCode); },
+    or: function (a, b) { return a.concat(b.filter(function (x) { return a.indexOf(x) < 0; })).sort(byCode); },
+    sub: function (a, b) { return a.filter(function (x) { return b.indexOf(x) < 0; }).sort(byCode); },
+    le: function (a, b) { return a.every(function (x) { return b.indexOf(x) >= 0; }); }
+  };
+  var S = window.__setOps;
+
+  /* --- Тренажёр 3: словарь (поведение как в Python) --- */
+  (function () {
+    var Kf = $('#dc-k'); if (!Kf) return;
+    var Vf = $('#dc-v'), cards = $('#dc-cards'), expr = $('#dc-expr'), say = $('#dc-say');
+    var START = [['17', 'куртка'], ['23', 'пальто']], keys, vals;
+    function keyRepr(k) { return /^-?\d+$/.test(k) ? String(parseInt(k, 10)) : pyRepr(k); }
+    function dictRepr() { return '{' + keys.map(function (k, i) { return keyRepr(k) + ': ' + pyRepr(vals[i]); }).join(', ') + '}'; }
+    function show(code, text, cls, hit) {
+      expr.textContent = '';
+      expr.appendChild(document.createTextNode(code + '\nрезультат:  '));
+      expr.appendChild(el('span', cls, text));
+      expr.appendChild(document.createTextNode('\nd = '));
+      expr.appendChild(el('span', 'str', dictRepr()));
+      cards.textContent = '';
+      keys.forEach(function (k, i) {
+        var c = el('div', k === hit ? 'hit' : '');
+        c.appendChild(el('b', '', keyRepr(k))); c.appendChild(el('span', '', vals[i]));
+        cards.appendChild(c);
+      });
+      if (!keys.length) cards.appendChild(el('span', 'nm-empty', 'Словарь пуст: {}'));
+    }
+    function act(m) {
+      var k = Kf.value.trim(), v = Vf.value, r = keyRepr(k), pos = keys ? keys.indexOf(k) : -1;
+      if (m === 'reset') { keys = START.map(function (p) { return p[0]; }); vals = START.map(function (p) { return p[1]; }); show('d = ' + dictRepr(), 'None', 'res'); say.textContent = 'В гардеробе две вещи. Слева на карточке ключ, справа значение.'; return; }
+      if (k === '' && m !== 'len') { say.textContent = 'Впиши ключ в поле «ключ k».'; return; }
+      if (m === 'set') {
+        if (pos < 0 && keys.length >= 6) { say.textContent = 'В тренажёре помещается шесть пар. Удали что-нибудь или нажми «сначала».'; return; }
+        if (pos < 0) { keys.push(k); vals.push(v); say.textContent = 'Такого ключа не было: в словарь добавлена новая пара.'; }
+        else { vals[pos] = v; say.textContent = 'Такой ключ уже был: старое значение заменено новым. Пар столько же, сколько было.'; }
+        show('d[' + r + '] = ' + pyRepr(v), 'None', 'res', k);
+      } else if (m === 'read') {
+        if (pos < 0) { show('d[' + r + ']', 'KeyError: ' + r, 'bad'); say.textContent = 'Ключа нет: программа остановилась бы с ошибкой KeyError. Сначала проверяют k in d.'; }
+        else { show('d[' + r + ']', pyRepr(vals[pos]), 'str', k); say.textContent = 'По ключу сразу получено значение. Словарь не изменился.'; }
+      } else if (m === 'get') {
+        if (pos < 0) { show('d.get(' + r + ')', 'None', 'res'); say.textContent = 'Ключа нет, но ошибки тоже нет: get() вернул None. Вторым аргументом можно задать запасное значение.'; }
+        else { show('d.get(' + r + ')', pyRepr(vals[pos]), 'str', k); say.textContent = 'Ключ есть: get() вернул значение, как и d[k].'; }
+      } else if (m === 'in') {
+        show(r + ' in d', pyBool(pos >= 0), 'res', pos >= 0 ? k : null);
+        say.textContent = 'Оператор in проверяет ключи, а не значения. Ответ — True или False.';
+      } else if (m === 'del') {
+        if (pos < 0) { show('del d[' + r + ']', 'KeyError: ' + r, 'bad'); say.textContent = 'Удалить можно только существующий ключ. Иначе — ошибка KeyError.'; }
+        else { keys.splice(pos, 1); vals.splice(pos, 1); show('del d[' + r + ']', 'None', 'res'); say.textContent = 'Пара удалена: ключ вместе со значением.'; }
+      } else if (m === 'len') { show('len(d)', String(keys.length), 'res'); say.textContent = 'Длина словаря — число пар.'; }
+    }
+    $$('#dc-buttons button').forEach(function (b) { b.addEventListener('click', function () { act(b.getAttribute('data-m')); }); });
+    act('reset');
+  })();
+})();
+</script>
+</body>
+</html>
